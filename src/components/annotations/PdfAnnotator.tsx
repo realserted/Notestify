@@ -50,7 +50,7 @@ export const PdfAnnotator = ({
     (async () => {
       try {
         const pdfjs = await import('pdfjs-dist');
-        pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
         const res = await fetch(`/api/documents/${documentId}/url`);
         if (!res.ok) throw new Error('Could not fetch document');
