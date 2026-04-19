@@ -34,8 +34,13 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <h1 className="mb-6 text-2xl font-bold">Create your account</h1>
+      <Card className="w-full max-w-md p-8">
+        <h1 className="mb-2 font-serif text-3xl tracking-tight text-ink-900 dark:text-cream-50">
+          Create your account
+        </h1>
+        <p className="mb-6 text-sm text-ink-500 dark:text-cream-50/60">
+          Study smarter in just a few seconds.
+        </p>
         <form onSubmit={handleRegister} className="space-y-4">
           <Input
             label="Full name"
@@ -63,9 +68,9 @@ export default function RegisterPage() {
             Create account
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-400">
+        <p className="mt-6 text-center text-sm text-ink-500 dark:text-cream-50/70">
           Already have an account?{' '}
-          <Link href="/login" className="text-indigo-600 hover:underline dark:text-indigo-400">
+          <Link href="/login" className="font-medium text-coral-500 hover:text-coral-600 hover:underline">
             Sign in
           </Link>
         </p>

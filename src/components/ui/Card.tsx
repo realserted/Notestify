@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 export const Card = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900',
+      'rounded-2xl border border-cream-200 bg-white p-6 dark:border-ink-700 dark:bg-ink-900/60',
       className
     )}
     {...props}
@@ -17,7 +17,7 @@ export const CardHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElemen
 
 export const CardTitle = ({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) => (
   <h3
-    className={cn('text-lg font-semibold text-slate-900 dark:text-slate-100', className)}
+    className={cn('font-serif text-lg text-ink-900 dark:text-cream-50', className)}
     {...props}
   />
 );

@@ -22,14 +22,16 @@ export const Sidebar = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push('/');
     router.refresh();
   };
 
   return (
-    <aside className="flex w-60 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-      <div className="border-b border-slate-200 p-4 dark:border-slate-800">
-        <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">Notestify</h1>
+    <aside className="flex w-60 flex-col border-r border-cream-200 bg-white dark:border-ink-700 dark:bg-ink-900/80">
+      <div className="border-b border-cream-200 p-5 dark:border-ink-700">
+        <h1 className="font-serif text-xl tracking-tight text-ink-900 dark:text-cream-50">
+          Notestify
+        </h1>
       </div>
       <nav className="flex-1 space-y-1 p-3">
         {NAV.map(({ href, label, icon: Icon }) => {
@@ -39,10 +41,10 @@ export const Sidebar = () => {
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                 active
-                  ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300'
-                  : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
+                  ? 'bg-cream-100 text-coral-600 dark:bg-ink-700/60 dark:text-coral-500'
+                  : 'text-ink-700 hover:bg-cream-100 dark:text-cream-50/80 dark:hover:bg-ink-700/40'
               )}
             >
               <Icon size={18} />
@@ -51,12 +53,12 @@ export const Sidebar = () => {
           );
         })}
       </nav>
-      <div className="border-t border-slate-200 p-3 dark:border-slate-800">
+      <div className="border-t border-cream-200 p-3 dark:border-ink-700">
         <ThemeToggle className="w-full justify-start" />
       </div>
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 border-t border-slate-200 px-6 py-4 text-sm text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
+        className="flex items-center gap-3 border-t border-cream-200 px-6 py-4 text-sm text-ink-500 transition-colors hover:bg-cream-100 dark:border-ink-700 dark:text-cream-50/70 dark:hover:bg-ink-700/40"
       >
         <LogOut size={18} />
         Sign out

@@ -18,9 +18,9 @@ export const ThemeToggle = ({ className }: ThemeToggleProps) => {
       onClick={toggle}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className={cn(
-        'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-        'text-slate-700 hover:bg-slate-100',
-        'dark:text-slate-200 dark:hover:bg-slate-800',
+        'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+        'text-ink-700 hover:bg-cream-100',
+        'dark:text-cream-50 dark:hover:bg-ink-700/40',
         className
       )}
     >

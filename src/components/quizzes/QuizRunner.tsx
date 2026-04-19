@@ -44,7 +44,7 @@ export const QuizRunner = ({ quiz }: Props) => {
       <div className="mx-auto max-w-2xl space-y-6">
         <Card className="text-center">
           <h2 className="text-3xl font-bold">{result.score}%</h2>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-2 text-ink-500">
             {result.correctCount} / {result.total} correct
           </p>
         </Card>
@@ -54,15 +54,15 @@ export const QuizRunner = ({ quiz }: Props) => {
           const isCorrect = userAnswer.toLowerCase() === q.correct_answer.toLowerCase();
           return (
             <Card key={q.id}>
-              <p className="mb-2 text-sm font-medium text-slate-500">Q{i + 1}</p>
+              <p className="mb-2 text-sm font-medium text-ink-500">Q{i + 1}</p>
               <p className="font-semibold">{q.question}</p>
               <p className={`mt-2 text-sm ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}>
                 Your answer: {userAnswer || '(no answer)'}
               </p>
               {!isCorrect && (
-                <p className="mt-1 text-sm text-slate-700">Correct: {q.correct_answer}</p>
+                <p className="mt-1 text-sm text-ink-700">Correct: {q.correct_answer}</p>
               )}
-              {q.explanation && <p className="mt-2 text-sm text-slate-500">{q.explanation}</p>}
+              {q.explanation && <p className="mt-2 text-sm text-ink-500">{q.explanation}</p>}
             </Card>
           );
         })}
@@ -74,12 +74,12 @@ export const QuizRunner = ({ quiz }: Props) => {
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-3xl font-bold">{quiz.title}</h1>
-        <p className="text-slate-500">{questions.length} questions</p>
+        <p className="text-ink-500">{questions.length} questions</p>
       </div>
 
       {questions.map((q, i) => (
         <Card key={q.id}>
-          <p className="mb-2 text-sm font-medium text-slate-500">Q{i + 1}</p>
+          <p className="mb-2 text-sm font-medium text-ink-500">Q{i + 1}</p>
           <p className="mb-4 font-semibold">{q.question}</p>
 
           {q.question_type === 'multiple_choice' && q.options && (
@@ -87,7 +87,7 @@ export const QuizRunner = ({ quiz }: Props) => {
               {q.options.map((opt) => (
                 <label
                   key={opt}
-                  className="flex cursor-pointer items-center gap-2 rounded border border-slate-200 p-3 hover:bg-slate-50"
+                  className="flex cursor-pointer items-center gap-2 rounded border border-cream-200 p-3 hover:bg-cream-50"
                 >
                   <input
                     type="radio"
@@ -107,7 +107,7 @@ export const QuizRunner = ({ quiz }: Props) => {
               {['true', 'false'].map((opt) => (
                 <label
                   key={opt}
-                  className="flex flex-1 cursor-pointer items-center gap-2 rounded border border-slate-200 p-3 hover:bg-slate-50"
+                  className="flex flex-1 cursor-pointer items-center gap-2 rounded border border-cream-200 p-3 hover:bg-cream-50"
                 >
                   <input
                     type="radio"
@@ -127,7 +127,7 @@ export const QuizRunner = ({ quiz }: Props) => {
               type="text"
               value={answers[q.id] ?? ''}
               onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
-              className="w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500"
+              className="w-full rounded-md border border-cream-200 px-3 py-2 outline-none focus:border-coral-500"
               placeholder="Your answer…"
             />
           )}

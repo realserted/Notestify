@@ -98,7 +98,7 @@ export const UploadManager = ({ initialDocuments }: Props) => {
             onChange={handleUpload}
             disabled={uploading}
           />
-          <span className="inline-flex h-10 items-center rounded-md bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700">
+          <span className="inline-flex h-10 items-center rounded-md bg-coral-500 px-4 text-sm font-medium text-white hover:bg-coral-600">
             {uploading ? 'Uploading…' : '+ Upload PDF'}
           </span>
         </label>
@@ -108,7 +108,7 @@ export const UploadManager = ({ initialDocuments }: Props) => {
 
       {documents.length === 0 ? (
         <Card>
-          <p className="text-slate-500">No documents yet.</p>
+          <p className="text-ink-500">No documents yet.</p>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -117,13 +117,13 @@ export const UploadManager = ({ initialDocuments }: Props) => {
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{doc.title}</p>
-                  <p className="text-sm text-slate-500">Status: {doc.status}</p>
+                  <p className="text-sm text-ink-500">Status: {doc.status}</p>
                   {doc.summary && (
                     <details className="mt-2">
-                      <summary className="cursor-pointer text-sm text-indigo-600">
+                      <summary className="cursor-pointer text-sm text-coral-500">
                         View summary
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap text-sm text-slate-700">
+                      <pre className="mt-2 whitespace-pre-wrap font-sans text-sm text-ink-700 dark:text-cream-50/80">
                         {doc.summary}
                       </pre>
                     </details>

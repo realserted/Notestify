@@ -41,9 +41,9 @@ export const CreateDeckButton = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 dark:bg-black/70">
       <form
         onSubmit={handleCreate}
-        className="w-full max-w-md space-y-4 rounded-lg border border-slate-200 bg-white p-6 text-slate-900 shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+        className="w-full max-w-md space-y-4 rounded-lg border border-cream-200 bg-white p-6 text-ink-900 shadow-xl dark:border-ink-700 dark:bg-ink-900 dark:text-cream-100"
       >
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Create Deck</h2>
+        <h2 className="text-xl font-bold text-ink-900 dark:text-cream-100">Create Deck</h2>
         <Input
           label="Title"
           value={title}

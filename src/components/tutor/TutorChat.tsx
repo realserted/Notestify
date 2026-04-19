@@ -56,7 +56,7 @@ export const TutorChat = () => {
       <Card className="flex flex-1 flex-col overflow-hidden p-0">
         <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6">
           {messages.length === 0 ? (
-            <p className="text-center text-slate-500 dark:text-slate-400">
+            <p className="text-center text-ink-500 dark:text-ink-500">
               Ask me anything you&apos;re studying…
             </p>
           ) : (
@@ -65,8 +65,8 @@ export const TutorChat = () => {
                 <div
                   className={`max-w-[80%] rounded-lg px-4 py-2 text-sm ${
                     m.role === 'user'
-                      ? 'bg-indigo-600 text-white dark:bg-indigo-500'
-                      : 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100'
+                      ? 'bg-coral-500 text-white dark:bg-coral-500'
+                      : 'bg-cream-100 text-ink-900 dark:bg-ink-700 dark:text-cream-100'
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{m.content}</p>
@@ -76,7 +76,7 @@ export const TutorChat = () => {
           )}
           {loading && (
             <div className="flex justify-start">
-              <div className="rounded-lg bg-slate-100 px-4 py-2 text-sm text-slate-900 dark:bg-slate-800 dark:text-slate-100">
+              <div className="rounded-lg bg-cream-100 px-4 py-2 text-sm text-ink-900 dark:bg-ink-700 dark:text-cream-100">
                 Thinking…
               </div>
             </div>
@@ -85,13 +85,13 @@ export const TutorChat = () => {
 
         <form
           onSubmit={handleSend}
-          className="flex gap-2 border-t border-slate-200 p-4 dark:border-slate-800"
+          className="flex gap-2 border-t border-cream-200 p-4 dark:border-ink-700"
         >
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask a question…"
-            className="flex-1 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-indigo-400"
+            className="flex-1 rounded-md border border-cream-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none placeholder:text-ink-500 focus:border-coral-500 dark:border-ink-700 dark:bg-ink-900 dark:text-cream-100 dark:placeholder:text-ink-500 dark:focus:border-coral-500"
             disabled={loading}
           />
           <Button type="submit" loading={loading}>

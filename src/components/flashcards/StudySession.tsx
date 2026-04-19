@@ -15,7 +15,7 @@ const QUALITY_LABELS = [
   { value: 0, label: 'Again', color: 'bg-red-500 hover:bg-red-600' },
   { value: 3, label: 'Hard', color: 'bg-amber-500 hover:bg-amber-600' },
   { value: 4, label: 'Good', color: 'bg-emerald-500 hover:bg-emerald-600' },
-  { value: 5, label: 'Easy', color: 'bg-indigo-500 hover:bg-indigo-600' },
+  { value: 5, label: 'Easy', color: 'bg-coral-500 hover:bg-coral-500' },
 ];
 
 export const StudySession = ({ initialCards, deckId }: Props) => {
@@ -29,7 +29,7 @@ export const StudySession = ({ initialCards, deckId }: Props) => {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
         <h2 className="text-2xl font-bold">All caught up! 🎉</h2>
-        <p className="text-slate-500">No cards are due right now.</p>
+        <p className="text-ink-500">No cards are due right now.</p>
         <Button onClick={() => router.push(`/decks/${deckId}`)}>Back to deck</Button>
       </div>
     );
@@ -39,7 +39,7 @@ export const StudySession = ({ initialCards, deckId }: Props) => {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
         <h2 className="text-2xl font-bold">Session complete!</h2>
-        <p className="text-slate-500">You reviewed {cards.length} cards.</p>
+        <p className="text-ink-500">You reviewed {cards.length} cards.</p>
         <Button onClick={() => router.push(`/decks/${deckId}`)}>Back to deck</Button>
       </div>
     );
@@ -61,7 +61,7 @@ export const StudySession = ({ initialCards, deckId }: Props) => {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex items-center justify-between text-sm text-slate-500">
+      <div className="flex items-center justify-between text-sm text-ink-500">
         <span>
           Card {index + 1} of {cards.length}
         </span>
@@ -72,11 +72,11 @@ export const StudySession = ({ initialCards, deckId }: Props) => {
         className="min-h-[300px] cursor-pointer p-12 text-center"
         onClick={() => setFlipped((f) => !f)}
       >
-        <p className="text-xs uppercase tracking-wide text-slate-400">
+        <p className="text-xs uppercase tracking-wide text-ink-500">
           {flipped ? 'Answer' : 'Question'}
         </p>
         <p className="mt-6 text-xl">{flipped ? current.back : current.front}</p>
-        {!flipped && <p className="mt-8 text-xs text-slate-400">Click to reveal</p>}
+        {!flipped && <p className="mt-8 text-xs text-ink-500">Click to reveal</p>}
       </Card>
 
       {flipped && (

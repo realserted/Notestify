@@ -31,7 +31,7 @@ export default async function DecksPage() {
 
       {decks.length === 0 ? (
         <Card>
-          <p className="text-slate-500 dark:text-slate-400">No decks yet. Create one to get started.</p>
+          <p className="text-ink-500 dark:text-ink-500">No decks yet. Create one to get started.</p>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -40,11 +40,11 @@ export default async function DecksPage() {
               <CardHeader>
                 <CardTitle>{deck.title}</CardTitle>
               </CardHeader>
-              <p className="mb-4 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mb-4 line-clamp-2 text-sm text-ink-500 dark:text-ink-500">
                 {deck.description || 'No description'}
               </p>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500 dark:text-slate-400">{deck.flashcards[0]?.count ?? 0} cards</span>
+                <span className="text-ink-500 dark:text-ink-500">{deck.flashcards[0]?.count ?? 0} cards</span>
                 <Link href={`/decks/${deck.id}`}>
                   <Button size="sm" variant="outline">
                     Open

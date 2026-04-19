@@ -31,7 +31,7 @@ export default async function QuizzesPage() {
 
       {quizzes.length === 0 ? (
         <Card>
-          <p className="text-slate-500 dark:text-slate-400">No quizzes yet. Generate one with AI to begin.</p>
+          <p className="text-ink-500 dark:text-ink-500">No quizzes yet. Generate one with AI to begin.</p>
         </Card>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -40,7 +40,7 @@ export default async function QuizzesPage() {
               <CardHeader>
                 <CardTitle>{q.title}</CardTitle>
               </CardHeader>
-              <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mb-4 text-sm text-ink-500 dark:text-ink-500">
                 {q.quiz_questions[0]?.count ?? 0} questions · {q.quiz_attempts[0]?.count ?? 0}{' '}
                 attempts
               </p>

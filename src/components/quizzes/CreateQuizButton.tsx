@@ -71,12 +71,12 @@ export const CreateQuizButton = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 dark:bg-black/70">
       <form
         onSubmit={handleGenerate}
-        className="w-full max-w-md space-y-4 rounded-lg border border-slate-200 bg-white p-6 text-slate-900 shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+        className="w-full max-w-md space-y-4 rounded-lg border border-cream-200 bg-white p-6 text-ink-900 shadow-xl dark:border-ink-700 dark:bg-ink-900 dark:text-cream-100"
       >
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Generate Quiz</h2>
+        <h2 className="text-xl font-bold text-ink-900 dark:text-cream-100">Generate Quiz</h2>
         <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
         <div className="flex items-center justify-between gap-3">
-          <label className="inline-flex cursor-pointer items-center rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          <label className="inline-flex cursor-pointer items-center rounded-md border border-cream-200 px-3 py-2 text-sm font-medium text-ink-700 hover:bg-cream-50 dark:border-ink-700 dark:text-cream-200 dark:hover:bg-ink-700">
             <input
               type="file"
               accept=".pdf,.docx,.pptx"
@@ -91,7 +91,7 @@ export const CreateQuizButton = () => {
                 : 'Upload PDF / DOCX / PPTX'}
           </label>
           {sourceFile && stage === 'idle' && (
-            <span className="truncate text-xs text-slate-500 dark:text-slate-400">
+            <span className="truncate text-xs text-ink-500 dark:text-ink-500">
               From: {sourceFile}
             </span>
           )}

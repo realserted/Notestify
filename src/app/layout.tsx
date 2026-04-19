@@ -1,6 +1,14 @@
 import type { Metadata } from 'next';
+import { Fraunces } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import './globals.css';
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+  axes: ['opsz', 'SOFT'],
+});
 
 export const metadata: Metadata = {
   title: 'Notestify — AI-powered study companion',
@@ -13,11 +21,11 @@ const themeInitScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={fraunces.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+      <body className="min-h-screen bg-cream-50 text-ink-900 antialiased dark:bg-ink-900 dark:text-cream-50">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

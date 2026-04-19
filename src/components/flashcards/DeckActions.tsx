@@ -100,9 +100,9 @@ export const DeckActions = ({ deckId }: Props) => {
       {mode === 'manual' ? (
         <form
           onSubmit={handleManual}
-          className="w-full max-w-md space-y-4 rounded-lg border border-slate-200 bg-white p-6 text-slate-900 shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+          className="w-full max-w-md space-y-4 rounded-lg border border-cream-200 bg-white p-6 text-ink-900 shadow-xl dark:border-ink-700 dark:bg-ink-900 dark:text-cream-100"
         >
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Add Flashcard</h2>
+          <h2 className="text-xl font-bold text-ink-900 dark:text-cream-100">Add Flashcard</h2>
           <Textarea
             label="Front"
             value={front}
@@ -129,13 +129,13 @@ export const DeckActions = ({ deckId }: Props) => {
       ) : (
         <form
           onSubmit={handleAI}
-          className="w-full max-w-md space-y-4 rounded-lg border border-slate-200 bg-white p-6 text-slate-900 shadow-xl dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+          className="w-full max-w-md space-y-4 rounded-lg border border-cream-200 bg-white p-6 text-ink-900 shadow-xl dark:border-ink-700 dark:bg-ink-900 dark:text-cream-100"
         >
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+          <h2 className="text-xl font-bold text-ink-900 dark:text-cream-100">
             AI Generate Flashcards
           </h2>
           <div className="flex items-center justify-between gap-3">
-            <label className="inline-flex cursor-pointer items-center rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+            <label className="inline-flex cursor-pointer items-center rounded-md border border-cream-200 px-3 py-2 text-sm font-medium text-ink-700 hover:bg-cream-50 dark:border-ink-700 dark:text-cream-200 dark:hover:bg-ink-700">
               <input
                 type="file"
                 accept=".pdf,.docx,.pptx"
@@ -150,7 +150,7 @@ export const DeckActions = ({ deckId }: Props) => {
                   : 'Upload PDF / DOCX / PPTX'}
             </label>
             {sourceFile && stage === 'idle' && (
-              <span className="truncate text-xs text-slate-500 dark:text-slate-400">
+              <span className="truncate text-xs text-ink-500 dark:text-ink-500">
                 From: {sourceFile}
               </span>
             )}

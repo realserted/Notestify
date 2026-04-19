@@ -8,20 +8,20 @@ export const ProgressBar = ({ progress, label }: ProgressBarProps) => {
   return (
     <div className="space-y-1">
       {label && (
-        <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400">
+        <div className="flex justify-between text-xs text-ink-500 dark:text-cream-50/60">
           <span>{label}</span>
           {!isIndeterminate && <span>{Math.round(progress)}%</span>}
         </div>
       )}
-      <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+      <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-cream-100 dark:bg-ink-700/60">
         {isIndeterminate ? (
           <div
-            className="absolute h-full w-1/3 rounded-full bg-indigo-600 dark:bg-indigo-500"
+            className="absolute h-full w-1/3 rounded-full bg-coral-500"
             style={{ animation: 'progress-indeterminate 1.5s ease-in-out infinite' }}
           />
         ) : (
           <div
-            className="h-full rounded-full bg-indigo-600 transition-all duration-150 dark:bg-indigo-500"
+            className="h-full rounded-full bg-coral-500 transition-all duration-150"
             style={{ width: `${progress}%` }}
           />
         )}

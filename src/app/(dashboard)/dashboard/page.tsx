@@ -15,11 +15,11 @@ const StatCard = ({
 }) => (
   <Card>
     <div className="flex items-center gap-4">
-      <div className="rounded-md bg-indigo-50 p-3 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-300">
+      <div className="rounded-md bg-cream-100 p-3 text-coral-500 dark:bg-coral-500/10 dark:text-coral-500">
         <Icon size={24} />
       </div>
       <div>
-        <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="text-sm text-ink-500 dark:text-ink-500">{label}</p>
         <p className="text-2xl font-bold">{value}</p>
       </div>
     </div>
@@ -50,13 +50,13 @@ export default async function DashboardPage() {
         <Card>
           <h3 className="mb-4 text-lg font-semibold">Recent quiz attempts</h3>
           {stats.recentAttempts.length === 0 ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400">No attempts yet.</p>
+            <p className="text-sm text-ink-500 dark:text-ink-500">No attempts yet.</p>
           ) : (
             <ul className="space-y-2">
               {stats.recentAttempts.map((a) => (
                 <li
                   key={a.id}
-                  className="flex justify-between border-b border-slate-100 py-2 text-sm dark:border-slate-800"
+                  className="flex justify-between border-b border-cream-100 py-2 text-sm dark:border-ink-700"
                 >
                   <span>{new Date(a.completed_at).toLocaleDateString()}</span>
                   <span className="font-medium">{a.score}%</span>
@@ -69,13 +69,13 @@ export default async function DashboardPage() {
         <Card>
           <h3 className="mb-4 text-lg font-semibold">Weak topics</h3>
           {stats.weakTopics.length === 0 ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400">Take a quiz to see insights.</p>
+            <p className="text-sm text-ink-500 dark:text-ink-500">Take a quiz to see insights.</p>
           ) : (
             <ul className="space-y-2">
               {stats.weakTopics.map((t) => (
                 <li
                   key={t.deck_id}
-                  className="flex justify-between border-b border-slate-100 py-2 text-sm dark:border-slate-800"
+                  className="flex justify-between border-b border-cream-100 py-2 text-sm dark:border-ink-700"
                 >
                   <span>{t.deck_title}</span>
                   <span className="font-medium text-red-600 dark:text-red-400">{t.accuracy}%</span>
