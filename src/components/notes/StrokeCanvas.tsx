@@ -200,7 +200,7 @@ export const StrokeCanvas = forwardRef<StrokeCanvasHandle, StrokeCanvasProps>(
 
     return (
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-20"
         style={{ width, height }}
       >
         <canvas

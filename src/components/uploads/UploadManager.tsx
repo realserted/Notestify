@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { Document } from '@/types/database';
 import { Card } from '@/components/ui/Card';
@@ -136,7 +137,14 @@ export const UploadManager = ({ initialDocuments }: Props) => {
                     </details>
                   )}
                 </div>
-                <div className="flex shrink-0 gap-2">
+                <div className="flex shrink-0 flex-wrap gap-2">
+                  {(doc.mime_type ?? '').includes('pdf') && (
+                    <Link href={`/documents/${doc.id}`}>
+                      <Button size="sm" variant="outline">
+                        Annotate
+                      </Button>
+                    </Link>
+                  )}
                   {!doc.extracted_text && (
                     <Button
                       size="sm"

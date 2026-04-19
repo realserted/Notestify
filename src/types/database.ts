@@ -84,6 +84,41 @@ export interface Document {
   updated_at: string;
 }
 
+export type AnnotationKind = 'highlight' | 'note' | 'stroke';
+
+export interface HighlightData {
+  color: string;
+  rects: Array<{ x: number; y: number; w: number; h: number }>;
+  text?: string;
+}
+
+export interface NoteAnnotationData {
+  x: number;
+  y: number;
+  color: string;
+  text: string;
+}
+
+export interface StrokeAnnotationData {
+  tool: 'pen' | 'highlighter';
+  color: string;
+  size: number;
+  points: Array<[number, number, number]>;
+}
+
+export type AnnotationData = HighlightData | NoteAnnotationData | StrokeAnnotationData;
+
+export interface DocumentAnnotation {
+  id: string;
+  user_id: string;
+  document_id: string;
+  page: number;
+  kind: AnnotationKind;
+  data: AnnotationData;
+  created_at: string;
+  updated_at: string;
+}
+
 export type NotebookCover = 'coral' | 'cream' | 'ink' | 'sage' | 'sky' | 'plum' | 'butter';
 export type PaperStyle = 'blank' | 'ruled' | 'grid' | 'dotted' | 'cornell';
 
