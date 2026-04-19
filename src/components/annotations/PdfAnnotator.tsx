@@ -49,6 +49,7 @@ export const PdfAnnotator = ({
     let cancelled = false;
     (async () => {
       try {
+        await import('@/lib/polyfills');
         const pdfjs = await import('pdfjs-dist');
         pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 

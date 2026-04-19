@@ -1,3 +1,16 @@
+
+// Polyfill Map/WeakMap upsert methods for iPad Safari < 17.4 (pdf.js 5.x needs these).
+if (typeof Map !== 'undefined') {
+  const p = Map.prototype;
+  if (!p.getOrInsert) p.getOrInsert = function (k, v) { if (this.has(k)) return this.get(k); this.set(k, v); return v; };
+  if (!p.getOrInsertComputed) p.getOrInsertComputed = function (k, fn) { if (this.has(k)) return this.get(k); const v = fn(k); this.set(k, v); return v; };
+}
+if (typeof WeakMap !== 'undefined') {
+  const p = WeakMap.prototype;
+  if (!p.getOrInsert) p.getOrInsert = function (k, v) { if (this.has(k)) return this.get(k); this.set(k, v); return v; };
+  if (!p.getOrInsertComputed) p.getOrInsertComputed = function (k, fn) { if (this.has(k)) return this.get(k); const v = fn(k); this.set(k, v); return v; };
+}
+
 /**
  * @licstart The following is the entire license notice for the
  * JavaScript code in this page

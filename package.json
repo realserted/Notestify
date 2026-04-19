@@ -8,8 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "copy-pdf-worker": "node -e \"require('fs').copyFileSync('node_modules/pdfjs-dist/build/pdf.worker.min.mjs','public/pdf.worker.min.mjs')\"",
-    "postinstall": "npm run copy-pdf-worker"
+    "copy-pdf-worker": "node scripts/copy-pdf-worker.mjs",
+    "postinstall": "npm run copy-pdf-worker",
+    "prebuild": "npm run copy-pdf-worker",
+    "predev": "npm run copy-pdf-worker"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
