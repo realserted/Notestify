@@ -59,4 +59,27 @@ if (typeof WeakMap !== 'undefined') {
   }
 }
 
+interface PromiseWithResolversShape {
+  withResolvers?: <T>() => {
+    promise: Promise<T>;
+    resolve: (value: T | PromiseLike<T>) => void;
+    reject: (reason?: unknown) => void;
+  };
+}
+
+if (typeof Promise !== 'undefined') {
+  const P = Promise as unknown as PromiseWithResolversShape;
+  if (typeof P.withResolvers !== 'function') {
+    P.withResolvers = function <T>() {
+      let resolve!: (value: T | PromiseLike<T>) => void;
+      let reject!: (reason?: unknown) => void;
+      const promise = new Promise<T>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      return { promise, resolve, reject };
+    };
+  }
+}
+
 export {};

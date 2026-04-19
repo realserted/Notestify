@@ -12,6 +12,13 @@ if (typeof WeakMap !== 'undefined') {
   if (!p.getOrInsert) p.getOrInsert = function (k, v) { if (this.has(k)) return this.get(k); this.set(k, v); return v; };
   if (!p.getOrInsertComputed) p.getOrInsertComputed = function (k, fn) { if (this.has(k)) return this.get(k); const v = fn(k); this.set(k, v); return v; };
 }
+if (typeof Promise !== 'undefined' && typeof Promise.withResolvers !== 'function') {
+  Promise.withResolvers = function () {
+    let resolve, reject;
+    const promise = new Promise(function (res, rej) { resolve = res; reject = rej; });
+    return { promise: promise, resolve: resolve, reject: reject };
+  };
+}
 `;
 
 const src = 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs';
