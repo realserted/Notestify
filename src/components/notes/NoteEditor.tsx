@@ -11,6 +11,7 @@ import { PaperBackground } from './PaperBackground';
 import { StrokeCanvas, type Tool, type StrokeCanvasHandle } from './StrokeCanvas';
 import { ToolPalette } from './ToolPalette';
 import { Button } from '@/components/ui/Button';
+import { useFeatureTour } from '@/components/tutorial/useFeatureTour';
 
 interface NoteEditorProps {
   note: Note;
@@ -36,6 +37,58 @@ export const NoteEditor = ({ note, notebookId, notebookTitle }: NoteEditorProps)
   const pageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<StrokeCanvasHandle>(null);
   const [dims, setDims] = useState({ width: 800, height: 1100 });
+
+  useFeatureTour('note-editor', [
+    {
+      element: '[data-tour="note-tool-text"]',
+      popover: {
+        title: 'Type like a doc',
+        description: 'Text mode writes rich text on the page. Switch modes any time — your text and ink live side by side.',
+      },
+    },
+    {
+      element: '[data-tour="note-tool-pen"]',
+      popover: {
+        title: 'Pen — scribble and sketch',
+        description: 'Apple Pencil pressure works on iPad. On desktop, drag with your mouse. Pick a color and size below.',
+      },
+    },
+    {
+      element: '[data-tour="note-tool-highlighter"]',
+      popover: {
+        title: 'Highlighter',
+        description: 'Translucent strokes that sit on top of your text. Great for emphasizing key bits.',
+      },
+    },
+    {
+      element: '[data-tour="note-tool-eraser"]',
+      popover: {
+        title: 'Eraser',
+        description: 'Drag across any stroke to remove it. Only affects ink, not typed text.',
+      },
+    },
+    {
+      element: '[data-tour="note-paper"]',
+      popover: {
+        title: 'Paper style',
+        description: 'Ruled, grid, dotted, blank, or cornell. Switch any time — it updates live.',
+      },
+    },
+    {
+      element: '[data-tour="note-generate-flashcards"]',
+      popover: {
+        title: 'Flashcards from your note',
+        description: 'Turns the typed text on this page into a new deck of AI-generated flashcards.',
+      },
+    },
+    {
+      element: '[data-tour="note-generate-quiz"]',
+      popover: {
+        title: 'Quiz from your note',
+        description: 'Same idea — turns this page into a multi-format quiz. Pages autosave as you go.',
+      },
+    },
+  ]);
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -142,6 +195,7 @@ export const NoteEditor = ({ note, notebookId, notebookTitle }: NoteEditorProps)
             {saving ? 'Saving…' : 'Saved'}
           </span>
           <Button
+            data-tour="note-generate-flashcards"
             size="sm"
             variant="outline"
             onClick={() => handleGenerate('flashcards')}
@@ -151,6 +205,7 @@ export const NoteEditor = ({ note, notebookId, notebookTitle }: NoteEditorProps)
             Flashcards
           </Button>
           <Button
+            data-tour="note-generate-quiz"
             size="sm"
             variant="outline"
             onClick={() => handleGenerate('quiz')}

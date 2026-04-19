@@ -90,6 +90,7 @@ export interface HighlightData {
   color: string;
   rects: Array<{ x: number; y: number; w: number; h: number }>;
   text?: string;
+  note?: string;
 }
 
 export interface NoteAnnotationData {
@@ -104,6 +105,7 @@ export interface StrokeAnnotationData {
   color: string;
   size: number;
   points: Array<[number, number, number]>;
+  note?: string;
 }
 
 export type AnnotationData = HighlightData | NoteAnnotationData | StrokeAnnotationData;

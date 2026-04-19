@@ -14,6 +14,7 @@ import { AnnotatorToolbar, type AnnotationTool } from './AnnotatorToolbar';
 import { AnnotationSidebar } from './AnnotationSidebar';
 import { PdfPage } from './PdfPage';
 import { exportAnnotatedPdf } from './exportPdf';
+import { useFeatureTour } from '@/components/tutorial/useFeatureTour';
 
 interface PdfAnnotatorProps {
   documentId: string;
@@ -77,6 +78,55 @@ export const PdfAnnotator = ({
     if (tool === 'highlight') setColor((c) => (c === '#1F1E1D' ? '#fde047' : c));
     if (tool === 'pen') setColor((c) => (c.startsWith('#fd') ? '#1F1E1D' : c));
   }, [tool]);
+
+  useFeatureTour(
+    'pdf-annotator',
+    [
+      {
+        element: '[data-tour="annot-tool-highlight"]',
+        popover: {
+          title: 'Highlight text',
+          description: 'Click this, then drag to select text on the PDF. It highlights in the color you pick below.',
+        },
+      },
+      {
+        element: '[data-tour="annot-tool-pen"]',
+        popover: {
+          title: 'Pen',
+          description: 'Draw freehand on top of the page. Apple Pencil pressure works on iPad Safari — finger touches are ignored so your palm won\'t draw.',
+        },
+      },
+      {
+        element: '[data-tour="annot-tool-highlighter"]',
+        popover: {
+          title: 'Ink highlighter',
+          description: 'Translucent strokes — same as the pen but for emphasis.',
+        },
+      },
+      {
+        element: '[data-tour="annot-tool-note"]',
+        popover: {
+          title: 'Sticky note',
+          description: 'Click anywhere on the page to drop a note pin. Type your comment, then click the pin later to reopen it.',
+        },
+      },
+      {
+        element: '[data-tour="annot-tool-eraser"]',
+        popover: {
+          title: 'Eraser',
+          description: 'Click on any stroke or highlight to remove it. Sticky notes have their own delete button.',
+        },
+      },
+      {
+        element: '[data-tour="annot-export"]',
+        popover: {
+          title: 'Export',
+          description: 'Download a new PDF with every highlight, stroke, and sticky note baked into the page — ready to share.',
+        },
+      },
+    ],
+    pdf !== null,
+  );
 
   const pageAnnotations = annotations.filter((a) => a.page === currentPage);
 
@@ -148,6 +198,16 @@ export const PdfAnnotator = ({
     setAnnotations((prev) => prev.filter((a) => a.id !== id));
     if (id.startsWith('temp-')) return;
     fetch(`/api/annotations/${id}`, { method: 'DELETE' }).catch(() => {});
+  };
+
+  const handleUpdateNote = (id: string, note: string) => {
+    const target = annotations.find((a) => a.id === id);
+    if (!target) return;
+    if (target.kind === 'highlight') {
+      handleUpdate(id, { ...(target.data as HighlightData), note });
+    } else if (target.kind === 'stroke') {
+      handleUpdate(id, { ...(target.data as StrokeAnnotationData), note });
+    }
   };
 
   const handleExport = async () => {
@@ -252,6 +312,7 @@ export const PdfAnnotator = ({
           annotations={annotations}
           onDelete={handleDelete}
           onJump={setCurrentPage}
+          onUpdateNote={handleUpdateNote}
         />
       </div>
     </div>

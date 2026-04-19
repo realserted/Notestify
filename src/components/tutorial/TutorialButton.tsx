@@ -74,7 +74,7 @@ const startTour = (onFinish?: () => void) => {
         popover: {
           title: 'Uploads',
           description:
-            'Drop a PDF, DOCX, or PPTX. Notestify extracts the text so you can turn it into flashcards, quizzes, or a quick AI summary.',
+            'Drop a PDF, DOCX, or PPTX. Extract the text to make flashcards, quizzes, or summaries — or hit Annotate on a PDF to highlight, scribble, and drop sticky notes right on the page.',
           side: 'right',
           align: 'start',
         },
@@ -102,7 +102,7 @@ const startTour = (onFinish?: () => void) => {
         popover: {
           title: "You're all set",
           description:
-            'Start by uploading a document or creating your first deck. Happy studying!',
+            "Mini-tours will show up the first time you open the note editor or annotate a PDF so you know how each tool works. Happy studying!",
         },
       },
     ],

@@ -44,33 +44,51 @@ export const AnnotatorToolbar = ({
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-xl border border-cream-200 bg-white p-2 shadow-sm dark:border-ink-700 dark:bg-ink-900/80">
       <div className="flex gap-1">
-        <ToolButton active={tool === 'select'} onClick={() => onToolChange('select')} label="Select">
+        <ToolButton
+          active={tool === 'select'}
+          onClick={() => onToolChange('select')}
+          label="Select"
+          dataTour="annot-tool-select"
+        >
           <MousePointer size={16} />
         </ToolButton>
         <ToolButton
           active={tool === 'highlight'}
           onClick={() => onToolChange('highlight')}
           label="Highlight text"
+          dataTour="annot-tool-highlight"
         >
           <Type size={16} />
         </ToolButton>
-        <ToolButton active={tool === 'pen'} onClick={() => onToolChange('pen')} label="Pen">
+        <ToolButton
+          active={tool === 'pen'}
+          onClick={() => onToolChange('pen')}
+          label="Pen"
+          dataTour="annot-tool-pen"
+        >
           <Pen size={16} />
         </ToolButton>
         <ToolButton
           active={tool === 'highlighter'}
           onClick={() => onToolChange('highlighter')}
           label="Highlighter"
+          dataTour="annot-tool-highlighter"
         >
           <Highlighter size={16} />
         </ToolButton>
-        <ToolButton active={tool === 'note'} onClick={() => onToolChange('note')} label="Sticky note">
+        <ToolButton
+          active={tool === 'note'}
+          onClick={() => onToolChange('note')}
+          label="Sticky note"
+          dataTour="annot-tool-note"
+        >
           <MessageSquare size={16} />
         </ToolButton>
         <ToolButton
           active={tool === 'eraser'}
           onClick={() => onToolChange('eraser')}
           label="Eraser"
+          dataTour="annot-tool-eraser"
         >
           <Eraser size={16} />
         </ToolButton>
@@ -117,6 +135,7 @@ export const AnnotatorToolbar = ({
       <div className="ml-auto">
         <button
           type="button"
+          data-tour="annot-export"
           onClick={onExport}
           disabled={exporting}
           className="inline-flex h-8 items-center gap-1 rounded-md bg-coral-500 px-3 text-sm font-medium text-white hover:bg-coral-600 disabled:opacity-60"
@@ -134,14 +153,17 @@ const ToolButton = ({
   active,
   onClick,
   label,
+  dataTour,
 }: {
   children: React.ReactNode;
   active: boolean;
   onClick: () => void;
   label: string;
+  dataTour?: string;
 }) => (
   <button
     type="button"
+    data-tour={dataTour}
     onClick={onClick}
     aria-label={label}
     aria-pressed={active}

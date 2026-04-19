@@ -42,18 +42,32 @@ export const ToolPalette = ({
   const isInk = tool === 'pen' || tool === 'highlighter';
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-cream-200 bg-white p-2 shadow-sm dark:border-ink-700 dark:bg-ink-900/80">
+    <div
+      data-tour="note-toolbar"
+      className="flex flex-wrap items-center gap-2 rounded-xl border border-cream-200 bg-white p-2 shadow-sm dark:border-ink-700 dark:bg-ink-900/80"
+    >
       <div className="flex gap-1">
-        <ToolButton active={tool === 'text'} onClick={() => onToolChange('text')} label="Text">
+        <ToolButton
+          active={tool === 'text'}
+          onClick={() => onToolChange('text')}
+          label="Text"
+          dataTour="note-tool-text"
+        >
           <Type size={16} />
         </ToolButton>
-        <ToolButton active={tool === 'pen'} onClick={() => onToolChange('pen')} label="Pen">
+        <ToolButton
+          active={tool === 'pen'}
+          onClick={() => onToolChange('pen')}
+          label="Pen"
+          dataTour="note-tool-pen"
+        >
           <Pen size={16} />
         </ToolButton>
         <ToolButton
           active={tool === 'highlighter'}
           onClick={() => onToolChange('highlighter')}
           label="Highlighter"
+          dataTour="note-tool-highlighter"
         >
           <Highlighter size={16} />
         </ToolButton>
@@ -61,6 +75,7 @@ export const ToolPalette = ({
           active={tool === 'eraser'}
           onClick={() => onToolChange('eraser')}
           label="Eraser"
+          dataTour="note-tool-eraser"
         >
           <Eraser size={16} />
         </ToolButton>
@@ -101,6 +116,7 @@ export const ToolPalette = ({
 
       <div className="h-6 w-px bg-cream-200 dark:bg-ink-700" />
       <select
+        data-tour="note-paper"
         value={paper}
         onChange={(e) => onPaperChange(e.target.value as PaperStyle)}
         className="h-8 rounded-md border border-cream-200 bg-white px-2 text-sm text-ink-700 dark:border-ink-700 dark:bg-ink-900 dark:text-cream-50"
@@ -131,14 +147,17 @@ const ToolButton = ({
   active,
   onClick,
   label,
+  dataTour,
 }: {
   children: React.ReactNode;
   active: boolean;
   onClick: () => void;
   label: string;
+  dataTour?: string;
 }) => (
   <button
     type="button"
+    data-tour={dataTour}
     onClick={onClick}
     aria-label={label}
     aria-pressed={active}
