@@ -50,8 +50,8 @@ export const TutorChat = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col">
-      <h1 className="mb-4 text-3xl font-bold">AI Tutor</h1>
+    <div className="flex h-[calc(100dvh-9rem)] flex-col md:h-[calc(100vh-7rem)]">
+      <h1 className="mb-4 font-serif text-3xl tracking-tight">AI Tutor</h1>
 
       <Card className="flex flex-1 flex-col overflow-hidden p-0">
         <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6">
@@ -91,7 +91,7 @@ export const TutorChat = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask a question…"
-            className="flex-1 rounded-md border border-cream-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none placeholder:text-ink-500 focus:border-coral-500 dark:border-ink-700 dark:bg-ink-900 dark:text-cream-100 dark:placeholder:text-ink-500 dark:focus:border-coral-500"
+            className="flex-1 rounded-lg border border-cream-200 bg-white px-3 py-2 text-base text-ink-900 outline-none placeholder:text-ink-500/60 focus:border-coral-500 focus:ring-1 focus:ring-coral-500 dark:border-ink-700 dark:bg-ink-900 dark:text-cream-50 dark:placeholder:text-cream-50/40 dark:focus:border-coral-500 sm:text-sm"
             disabled={loading}
           />
           <Button type="submit" loading={loading}>

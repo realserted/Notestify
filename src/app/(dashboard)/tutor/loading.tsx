@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 
 export default function TutorLoading() {
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col">
+    <div className="flex h-[calc(100dvh-9rem)] flex-col md:h-[calc(100vh-7rem)]">
       <Skeleton className="mb-4 h-9 w-32" />
       <Card className="flex flex-1 flex-col overflow-hidden p-0">
         <div className="flex-1 space-y-4 p-6">

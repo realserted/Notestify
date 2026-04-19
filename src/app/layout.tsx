@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Fraunces } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import './globals.css';
@@ -13,6 +13,16 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: 'Notestify — AI-powered study companion',
   description: 'Flashcards, quizzes, and AI-generated study materials.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FAF9F5' },
+    { media: '(prefers-color-scheme: dark)', color: '#1F1E1D' },
+  ],
 };
 
 const themeInitScript = `
