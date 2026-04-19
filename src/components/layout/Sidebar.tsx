@@ -13,14 +13,15 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
 import { cn } from '@/utils/cn';
 
 const NAV = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/decks', label: 'Decks', icon: BookOpen },
-  { href: '/quizzes', label: 'Quizzes', icon: FileText },
-  { href: '/uploads', label: 'Uploads', icon: Upload },
-  { href: '/tutor', label: 'AI Tutor', icon: MessageSquare },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, tourId: 'dashboard' },
+  { href: '/decks', label: 'Decks', icon: BookOpen, tourId: 'decks' },
+  { href: '/quizzes', label: 'Quizzes', icon: FileText, tourId: 'quizzes' },
+  { href: '/uploads', label: 'Uploads', icon: Upload, tourId: 'uploads' },
+  { href: '/tutor', label: 'AI Tutor', icon: MessageSquare, tourId: 'tutor' },
 ];
 
 interface SidebarProps {
@@ -56,12 +57,13 @@ export const Sidebar = ({ onNavigate }: SidebarProps) => {
         )}
       </div>
       <nav className="flex-1 space-y-1 p-3">
-        {NAV.map(({ href, label, icon: Icon }) => {
+        {NAV.map(({ href, label, icon: Icon, tourId }) => {
           const active = pathname.startsWith(href);
           return (
             <Link
               key={href}
               href={href}
+              data-tour={tourId}
               onClick={onNavigate}
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
@@ -76,8 +78,11 @@ export const Sidebar = ({ onNavigate }: SidebarProps) => {
           );
         })}
       </nav>
-      <div className="border-t border-cream-200 p-3 dark:border-ink-700">
-        <ThemeToggle className="w-full justify-start" />
+      <div className="space-y-1 border-t border-cream-200 p-3 dark:border-ink-700">
+        <TutorialButton className="w-full justify-start" />
+        <div data-tour="theme">
+          <ThemeToggle className="w-full justify-start" />
+        </div>
       </div>
       <button
         onClick={handleLogout}
