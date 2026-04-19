@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { BackgroundPicker } from '@/components/theme/BackgroundPicker';
 import { TutorialButton } from '@/components/tutorial/TutorialButton';
 import { cn } from '@/utils/cn';
 
@@ -85,6 +86,7 @@ export const Sidebar = ({ onNavigate }: SidebarProps) => {
         <div data-tour="theme">
           <ThemeToggle className="w-full justify-start" />
         </div>
+        <BackgroundPicker />
       </div>
       <button
         onClick={handleLogout}
