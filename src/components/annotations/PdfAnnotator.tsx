@@ -60,7 +60,12 @@ export const PdfAnnotator = ({
         if (cancelled) return;
         setPdfBytes(bytes);
 
-        const loadingTask = pdfjs.getDocument({ data: new Uint8Array(bytes) });
+        const loadingTask = pdfjs.getDocument({
+          data: new Uint8Array(bytes),
+          isEvalSupported: false,
+          disableAutoFetch: true,
+          disableStream: true,
+        });
         const loaded = await loadingTask.promise;
         if (cancelled) return;
         setPdf(loaded as unknown as PdfDocument);

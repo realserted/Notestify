@@ -52,53 +52,70 @@ export const PdfPage = ({
   const textLayerRef = useRef<HTMLDivElement>(null);
   const liveCanvasRef = useRef<HTMLCanvasElement>(null);
   const [dims, setDims] = useState({ width: 0, height: 0 });
+  const [renderError, setRenderError] = useState<string | null>(null);
   const currentPoints = useRef<Array<[number, number, number]>>([]);
   const drawing = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
+    setRenderError(null);
     (async () => {
-      const page = await pdf.getPage(pageNumber);
-      const viewport = page.getViewport({ scale });
-      if (cancelled) return;
-      setDims({ width: viewport.width, height: viewport.height });
+      try {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale });
+        if (cancelled) return;
+        setDims({ width: viewport.width, height: viewport.height });
 
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      await page.render({ canvasContext: ctx, viewport }).promise;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        if (cancelled) return;
 
-      if (textLayerRef.current) {
-        const layer = textLayerRef.current;
-        layer.innerHTML = '';
-        const textContent = await page.getTextContent();
-        textContent.items.forEach((item) => {
-          if (!item.str.trim()) return;
-          const tx = item.transform;
-          const fontHeight = Math.hypot(tx[2], tx[3]) * scale;
-          const left = tx[4] * scale;
-          const top = viewport.height - tx[5] * scale - fontHeight;
-          const span = document.createElement('span');
-          span.textContent = item.str;
-          span.style.position = 'absolute';
-          span.style.left = `${left}px`;
-          span.style.top = `${top}px`;
-          span.style.fontSize = `${fontHeight}px`;
-          span.style.whiteSpace = 'pre';
-          span.style.color = 'transparent';
-          span.style.userSelect = 'text';
-          span.style.cursor = tool === 'highlight' ? 'text' : 'default';
-          layer.appendChild(span);
-        });
+        if (textLayerRef.current) {
+          const layer = textLayerRef.current;
+          layer.innerHTML = '';
+          const textContent = await page.getTextContent();
+          textContent.items.forEach((item) => {
+            if (!item.str.trim()) return;
+            const tx = item.transform;
+            const fontHeight = Math.hypot(tx[2], tx[3]) * scale;
+            const left = tx[4] * scale;
+            const top = viewport.height - tx[5] * scale - fontHeight;
+            const span = document.createElement('span');
+            span.textContent = item.str;
+            span.style.position = 'absolute';
+            span.style.left = `${left}px`;
+            span.style.top = `${top}px`;
+            span.style.fontSize = `${fontHeight}px`;
+            span.style.whiteSpace = 'pre';
+            span.style.color = 'transparent';
+            span.style.userSelect = 'text';
+            layer.appendChild(span);
+          });
+        }
+      } catch (err) {
+        if (cancelled) return;
+        console.error('[PdfPage render]', err);
+        setRenderError(err instanceof Error ? err.message : 'Render failed');
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [pdf, pageNumber, scale, tool]);
+  }, [pdf, pageNumber, scale]);
+
+  useEffect(() => {
+    const layer = textLayerRef.current;
+    if (!layer) return;
+    const cursor = tool === 'highlight' ? 'text' : 'default';
+    layer.querySelectorAll('span').forEach((s) => {
+      (s as HTMLElement).style.cursor = cursor;
+    });
+  }, [tool, dims]);
 
   useEffect(() => {
     if (tool !== 'highlight') return;
@@ -233,8 +250,15 @@ export const PdfPage = ({
   return (
     <div
       className="relative mx-auto shadow-md"
-      style={{ width: dims.width, height: dims.height, background: '#fff' }}
+      style={{ width: dims.width || 600, height: dims.height || 800, background: '#fff' }}
     >
+      {renderError && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center p-4">
+          <p className="max-w-xs text-center text-sm text-red-600">
+            PDF render failed: {renderError}
+          </p>
+        </div>
+      )}
       <canvas ref={canvasRef} className="block" />
       <div
         ref={textLayerRef}
