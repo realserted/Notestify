@@ -1,5 +1,5 @@
 import mammoth from 'mammoth';
-import { parseOfficeAsync } from 'officeparser';
+import { parseOffice } from 'officeparser';
 import { extractTextFromPDF } from '@/lib/pdf/extract';
 
 export type SupportedExtension = 'pdf' | 'docx' | 'pptx';
@@ -29,6 +29,6 @@ export const extractTextFromFile = async (
     return value.trim();
   }
 
-  const text = await parseOfficeAsync(buffer);
-  return text.trim();
+  const ast = await parseOffice(buffer);
+  return ast.toText().trim();
 };

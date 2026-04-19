@@ -76,7 +76,7 @@ export const dashboardService = {
       .limit(50);
 
     const topicMap = new Map<string, { title: string; scores: number[] }>();
-    for (const row of (weakData ?? []) as Array<{
+    for (const row of (weakData ?? []) as unknown as Array<{
       score: number;
       quizzes: { deck_id: string | null; decks: { title: string } | null } | null;
     }>) {
