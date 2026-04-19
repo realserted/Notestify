@@ -84,6 +84,39 @@ export interface Document {
   updated_at: string;
 }
 
+export type NotebookCover = 'coral' | 'cream' | 'ink' | 'sage' | 'sky' | 'plum' | 'butter';
+export type PaperStyle = 'blank' | 'ruled' | 'grid' | 'dotted' | 'cornell';
+
+export interface Notebook {
+  id: string;
+  user_id: string;
+  title: string;
+  cover_color: NotebookCover;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Stroke {
+  id: string;
+  tool: 'pen' | 'highlighter';
+  color: string;
+  size: number;
+  points: Array<[number, number, number]>;
+}
+
+export interface Note {
+  id: string;
+  notebook_id: string;
+  user_id: string;
+  title: string;
+  paper_style: PaperStyle;
+  content: unknown;
+  strokes: Stroke[];
+  position: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface TutorMessage {
   id: string;
   conversation_id: string;

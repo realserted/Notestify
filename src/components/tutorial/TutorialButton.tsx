@@ -40,6 +40,16 @@ const startTour = (onFinish?: () => void) => {
         },
       },
       {
+        element: '[data-tour="notes"]',
+        popover: {
+          title: 'Notes',
+          description:
+            'Write and sketch on beautiful paper. Mix rich text with Apple Pencil handwriting, then turn any page into flashcards or a quiz.',
+          side: 'right',
+          align: 'start',
+        },
+      },
+      {
         element: '[data-tour="decks"]',
         popover: {
           title: 'Decks & Flashcards',

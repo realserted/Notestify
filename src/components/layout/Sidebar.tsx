@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   FileText,
   MessageSquare,
+  NotebookPen,
   Upload,
   LogOut,
   X,
@@ -18,6 +19,7 @@ import { cn } from '@/utils/cn';
 
 const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, tourId: 'dashboard' },
+  { href: '/notes', label: 'Notes', icon: NotebookPen, tourId: 'notes' },
   { href: '/decks', label: 'Decks', icon: BookOpen, tourId: 'decks' },
   { href: '/quizzes', label: 'Quizzes', icon: FileText, tourId: 'quizzes' },
   { href: '/uploads', label: 'Uploads', icon: Upload, tourId: 'uploads' },

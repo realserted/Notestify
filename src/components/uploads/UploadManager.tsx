@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import type { Document } from '@/types/database';
 import { Card } from '@/components/ui/Card';
@@ -15,9 +14,11 @@ interface Props {
 type ProcessingAction = 'extract' | 'summarize';
 
 export const UploadManager = ({ initialDocuments }: Props) => {
-  const router = useRouter();
   const supabase = createClient();
   const [documents, setDocuments] = useState(initialDocuments);
+
+  const patchDocument = (id: string, patch: Partial<Document>) =>
+    setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, ...patch } : d)));
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState<{ id: string; action: ProcessingAction } | null>(
     null,
@@ -63,14 +64,19 @@ export const UploadManager = ({ initialDocuments }: Props) => {
 
   const handleExtract = async (docId: string) => {
     setProcessing({ id: docId, action: 'extract' });
+    patchDocument(docId, { status: 'processing' });
     const res = await fetch('/api/pdf/extract', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ document_id: docId }),
     });
     setProcessing(null);
-    if (!res.ok) return alert('Extraction failed');
-    router.refresh();
+    if (!res.ok) {
+      patchDocument(docId, { status: 'failed' });
+      return alert('Extraction failed');
+    }
+    const { text } = await res.json();
+    patchDocument(docId, { extracted_text: text, status: 'ready' });
   };
 
   const handleSummarize = async (doc: Document) => {
@@ -83,7 +89,8 @@ export const UploadManager = ({ initialDocuments }: Props) => {
     });
     setProcessing(null);
     if (!res.ok) return alert('Summarization failed');
-    router.refresh();
+    const { summary } = await res.json();
+    patchDocument(doc.id, { summary });
   };
 
   return (
