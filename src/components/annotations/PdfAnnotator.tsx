@@ -80,48 +80,74 @@ export const PdfAnnotator = ({
 
   const pageAnnotations = annotations.filter((a) => a.page === currentPage);
 
-  const saveAnnotation = async (payload: {
-    page: number;
-    kind: 'highlight' | 'note' | 'stroke';
-    data: AnnotationData;
-  }) => {
-    const res = await fetch(`/api/documents/${documentId}/annotations`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) return;
-    const { annotation } = await res.json();
-    setAnnotations((prev) => [...prev, annotation]);
-  };
+  const saveAnnotation = useCallback(
+    (payload: {
+      page: number;
+      kind: 'highlight' | 'note' | 'stroke';
+      data: AnnotationData;
+    }) => {
+      const tempId = `temp-${crypto.randomUUID()}`;
+      const now = new Date().toISOString();
+      const optimistic: DocumentAnnotation = {
+        id: tempId,
+        user_id: '',
+        document_id: documentId,
+        page: payload.page,
+        kind: payload.kind,
+        data: payload.data,
+        created_at: now,
+        updated_at: now,
+      };
+      setAnnotations((prev) => [...prev, optimistic]);
 
-  const handleAddHighlight = useCallback((page: number, data: HighlightData) => {
-    saveAnnotation({ page, kind: 'highlight', data });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      fetch(`/api/documents/${documentId}/annotations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(async (res) => {
+          if (!res.ok) throw new Error('save failed');
+          const { annotation } = await res.json();
+          setAnnotations((prev) =>
+            prev.map((a) => (a.id === tempId ? annotation : a)),
+          );
+        })
+        .catch(() => {
+          setAnnotations((prev) => prev.filter((a) => a.id !== tempId));
+        });
+    },
+    [documentId],
+  );
 
-  const handleAddStroke = useCallback((page: number, data: StrokeAnnotationData) => {
-    saveAnnotation({ page, kind: 'stroke', data });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddHighlight = useCallback(
+    (page: number, data: HighlightData) => saveAnnotation({ page, kind: 'highlight', data }),
+    [saveAnnotation],
+  );
 
-  const handleAddNote = useCallback((page: number, data: NoteAnnotationData) => {
-    saveAnnotation({ page, kind: 'note', data });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleAddStroke = useCallback(
+    (page: number, data: StrokeAnnotationData) => saveAnnotation({ page, kind: 'stroke', data }),
+    [saveAnnotation],
+  );
 
-  const handleUpdate = async (id: string, data: AnnotationData) => {
+  const handleAddNote = useCallback(
+    (page: number, data: NoteAnnotationData) => saveAnnotation({ page, kind: 'note', data }),
+    [saveAnnotation],
+  );
+
+  const handleUpdate = (id: string, data: AnnotationData) => {
     setAnnotations((prev) => prev.map((a) => (a.id === id ? { ...a, data } : a)));
-    await fetch(`/api/annotations/${id}`, {
+    if (id.startsWith('temp-')) return;
+    fetch(`/api/annotations/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data }),
-    });
+    }).catch(() => {});
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     setAnnotations((prev) => prev.filter((a) => a.id !== id));
-    await fetch(`/api/annotations/${id}`, { method: 'DELETE' });
+    if (id.startsWith('temp-')) return;
+    fetch(`/api/annotations/${id}`, { method: 'DELETE' }).catch(() => {});
   };
 
   const handleExport = async () => {
