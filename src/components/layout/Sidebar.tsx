@@ -86,7 +86,9 @@ export const Sidebar = ({ onNavigate }: SidebarProps) => {
         <div data-tour="theme">
           <ThemeToggle className="w-full justify-start" />
         </div>
-        <BackgroundPicker />
+        <div data-tour="background">
+          <BackgroundPicker />
+        </div>
       </div>
       <button
         onClick={handleLogout}

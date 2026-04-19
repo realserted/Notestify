@@ -99,6 +99,16 @@ const startTour = (onFinish?: () => void) => {
         },
       },
       {
+        element: '[data-tour="background"]',
+        popover: {
+          title: 'Background color',
+          description:
+            'Tint the whole app — pink, blue, green, yellow, or orange — to match your mood. Works in both light and dark mode, and your pick is remembered next time.',
+          side: 'right',
+          align: 'start',
+        },
+      },
+      {
         popover: {
           title: "You're all set",
           description:
