@@ -1,0 +1,69 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+
+# next.js
+.next/
+out/
+build
+dist
+
+# production
+*.tsbuildinfo
+next-env.d.ts
+
+# vercel
+.vercel
+
+# env files (NEVER commit — contain API keys & secrets)
+.env
+.env.*
+!.env.local.example
+!.env.example
+
+# secrets / credentials
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+secrets.json
+credentials.json
+service-account*.json
+gcp-*.json
+firebase-adminsdk-*.json
+
+# supabase local state
+supabase/.branches
+supabase/.temp
+supabase/seed.sql
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE / editor
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# misc
+*.local
+tmp/
+temp/
