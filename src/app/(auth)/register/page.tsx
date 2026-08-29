@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { GoogleButton } from '@/components/auth/GoogleButton';
 import { AuthSplit } from '@/components/auth/AuthSplit';
+import { Turnstile, turnstileEnabled } from '@/components/auth/Turnstile';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaAttempt, setCaptchaAttempt] = useState(0);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,10 +28,18 @@ export default function RegisterPage() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: {
+        data: { full_name: fullName },
+        ...(captchaToken ? { captchaToken } : {}),
+      },
     });
     setLoading(false);
-    if (error) return setError(error.message);
+    if (error) {
+      // The token was consumed by that attempt; force a fresh challenge.
+      setCaptchaToken(null);
+      setCaptchaAttempt((n) => n + 1);
+      return setError(error.message);
+    }
     router.push('/dashboard');
     router.refresh();
   };
@@ -66,7 +77,17 @@ export default function RegisterPage() {
         {error && (
           <p className="text-sm font-semibold text-clay-500 dark:text-clay-300">{error}</p>
         )}
-        <Button type="submit" className="w-full" loading={loading}>
+        <Turnstile
+          onVerify={setCaptchaToken}
+          onExpire={() => setCaptchaToken(null)}
+          resetKey={captchaAttempt}
+        />
+        <Button
+          type="submit"
+          className="w-full"
+          loading={loading}
+          disabled={turnstileEnabled && !captchaToken}
+        >
           Create account
         </Button>
       </form>
