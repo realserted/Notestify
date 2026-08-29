@@ -3,6 +3,18 @@ import { NextRequest } from 'next/server';
 
 export const middleware = (request: NextRequest) => updateSession(request);
 
+// Only the routes that actually need a session decision. Everything else —
+// the landing page, /api/*, static assets — skips middleware entirely.
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  matcher: [
+    '/dashboard/:path*',
+    '/decks/:path*',
+    '/documents/:path*',
+    '/notes/:path*',
+    '/quizzes/:path*',
+    '/uploads/:path*',
+    '/tutor/:path*',
+    '/login/:path*',
+    '/register/:path*',
+  ],
 };
