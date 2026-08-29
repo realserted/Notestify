@@ -106,14 +106,16 @@ export const UploadManager = ({ initialDocuments }: Props) => {
       <h1 className="font-display text-[30px] font-extrabold tracking-[-0.03em]">Uploads</h1>
 
       <div className="rounded-pop border-2 border-dashed border-paper-300 bg-paper-50 p-[38px] text-center dark:border-night-600 dark:bg-night-800">
-        <p className="font-display text-xl font-bold tracking-[-0.02em]">Drop a PDF here</p>
+        <p className="font-display text-xl font-bold tracking-[-0.02em]">
+          Drop a PDF, DOCX, or PPTX
+        </p>
         <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-bark-500 dark:text-bark-300">
           Max 25 MB · extract the text once it&apos;s uploaded
         </p>
         <label className="mt-[18px] inline-block cursor-pointer">
           <input
             type="file"
-            accept="application/pdf"
+            accept=".pdf,.docx,.pptx"
             className="sr-only"
             onChange={handleUpload}
             disabled={uploading}
@@ -124,7 +126,7 @@ export const UploadManager = ({ initialDocuments }: Props) => {
         </label>
       </div>
 
-      {uploading && <ProgressBar progress={null} label="Uploading PDF…" />}
+      {uploading && <ProgressBar progress={null} label="Uploading…" />}
 
       {documents.length === 0 ? (
         <Card>

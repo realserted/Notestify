@@ -55,8 +55,12 @@ export const generateSummary = async (content: string): Promise<string> => {
   return readResponseText(result.response);
 };
 
-export const chatWithTutor = async (history: TutorChatMessage[]): Promise<string> => {
-  const model = getGeminiModel('gemini-2.5-flash', tutorSystemPrompt);
+export const chatWithTutor = async (
+  history: TutorChatMessage[],
+  /** Overrides the default persona when a conversation has material attached. */
+  systemInstruction?: string
+): Promise<string> => {
+  const model = getGeminiModel('gemini-2.5-flash', systemInstruction ?? tutorSystemPrompt);
 
   // Keep the most recent turns, and bound each one.
   const recent = history.slice(-MAX_HISTORY_MESSAGES);

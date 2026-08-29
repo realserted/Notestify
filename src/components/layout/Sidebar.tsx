@@ -10,6 +10,7 @@ import {
   NotebookPen,
   Upload,
   LogOut,
+  Search,
   Settings,
   X,
 } from 'lucide-react';
@@ -28,6 +29,7 @@ const NAV = [
   { href: '/quizzes', label: 'Quizzes', icon: FileText, tourId: 'quizzes', dot: 'bg-citrus-300' },
   { href: '/uploads', label: 'Uploads', icon: Upload, tourId: 'uploads', dot: 'bg-olive-300' },
   { href: '/tutor', label: 'AI Tutor', icon: MessageSquare, tourId: 'tutor', dot: 'bg-bark-500' },
+  { href: '/search', label: 'Search', icon: Search, tourId: 'search', dot: 'bg-caramel-500' },
 ];
 
 interface SidebarProps {

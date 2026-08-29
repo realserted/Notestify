@@ -9,6 +9,7 @@ const PROTECTED_PREFIXES = [
   '/documents',
   '/notes',
   '/quizzes',
+  '/search',
   '/settings',
   '/uploads',
   '/tutor',

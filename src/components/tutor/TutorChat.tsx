@@ -5,6 +5,7 @@ import { MessageSquarePlus, Trash2, History, X } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Markdown } from '@/components/ui/Markdown';
+import { ContextPicker, type TutorContext } from './ContextPicker';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -15,6 +16,7 @@ interface Conversation {
   id: string;
   title: string;
   updated_at: string;
+  context_label: string | null;
 }
 
 const relativeDay = (iso: string) => {
@@ -32,6 +34,7 @@ export const TutorChat = () => {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [context, setContext] = useState<TutorContext | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const loadConversations = useCallback(async () => {
@@ -51,14 +54,20 @@ export const TutorChat = () => {
     setHistoryOpen(false);
     const res = await fetch(`/api/ai/tutor/conversations/${id}`);
     if (!res.ok) return;
-    const { messages: history } = await res.json();
+    const { messages: history, conversation } = await res.json();
     setMessages(history);
     setConversationId(id);
+    setContext(
+      conversation?.context_label
+        ? { type: conversation.context_type, id: '', label: conversation.context_label }
+        : null
+    );
   };
 
   const startNew = () => {
     setMessages([]);
     setConversationId(null);
+    setContext(null);
     setHistoryOpen(false);
   };
 
@@ -81,7 +90,13 @@ export const TutorChat = () => {
     const res = await fetch('/api/ai/tutor', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userMessage.content, conversation_id: conversationId }),
+      body: JSON.stringify({
+        message: userMessage.content,
+        conversation_id: conversationId,
+        ...(conversationId || !context
+          ? {}
+          : { context_type: context.type, context_id: context.id }),
+      }),
     });
     setLoading(false);
 
@@ -140,6 +155,11 @@ export const TutorChat = () => {
                 }`}
               >
                 <span className="block truncate text-[13.5px] font-semibold">{c.title}</span>
+                {c.context_label && (
+                  <span className="mt-0.5 block truncate text-[11px] font-semibold opacity-80">
+                    {c.context_label}
+                  </span>
+                )}
                 <span
                   className={`block text-[11px] font-semibold ${
                     c.id === conversationId
@@ -242,6 +262,20 @@ export const TutorChat = () => {
               </div>
             )}
           </div>
+
+          {(context || !conversationId) && (
+            <div className="flex flex-wrap items-center gap-2 border-t-2 border-espresso-700 px-5 py-3 dark:border-night-600">
+              {conversationId ? (
+                context && (
+                  <span className="rounded-full border-2 border-espresso-700 bg-citrus-500 px-3.5 py-1.5 text-[13px] font-bold text-espresso-700 dark:border-espresso-900">
+                    Studying: {context.label}
+                  </span>
+                )
+              ) : (
+                <ContextPicker value={context} onChange={setContext} />
+              )}
+            </div>
+          )}
 
           <form
             onSubmit={handleSend}

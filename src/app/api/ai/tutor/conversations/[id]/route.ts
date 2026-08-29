@@ -14,7 +14,7 @@ export async function GET(_req: Request, { params }: Params) {
 
   const { data: conversation, error: convError } = await supabase
     .from('tutor_conversations')
-    .select('id, title')
+    .select('id, title, context_type, context_label')
     .eq('id', id)
     .eq('user_id', user.id)
     .single();

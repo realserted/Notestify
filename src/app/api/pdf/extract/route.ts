@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
-import { extractTextFromPDF } from '@/lib/pdf/extract';
+import { extractTextFromFile } from '@/lib/extract';
 
 const schema = z.object({
   document_id: z.string().uuid(),
@@ -39,7 +39,8 @@ export async function POST(req: NextRequest) {
     if (dlError || !fileBlob) throw dlError ?? new Error('Download failed');
 
     const buffer = Buffer.from(await fileBlob.arrayBuffer());
-    const extracted = await extractTextFromPDF(buffer);
+    // doc.title is the original filename, which is what selects the parser.
+    const extracted = await extractTextFromFile(buffer, doc.title);
 
     await supabase
       .from('documents')
