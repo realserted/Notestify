@@ -3,10 +3,11 @@ import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { generateFlashcards } from '@/lib/ai/service';
 import { flashcardService } from '@/services/flashcard.service';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
 const schema = z.object({
   deck_id: z.string().uuid(),
-  content: z.string().min(20),
+  content: z.string().min(20).max(100_000),
   count: z.number().int().min(1).max(30).default(10),
 });
 
@@ -16,6 +17,9 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const limit = await checkRateLimit(supabase, 'generate');
+  if (!limit.allowed) return rateLimitResponse('generate', limit);
 
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);

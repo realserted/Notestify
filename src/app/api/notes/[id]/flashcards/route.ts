@@ -5,6 +5,7 @@ import { deckService } from '@/services/deck.service';
 import { flashcardService } from '@/services/flashcard.service';
 import { generateFlashcards } from '@/lib/ai/service';
 import { tiptapToPlainText } from '@/lib/notes/tiptapText';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
 export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
@@ -13,6 +14,9 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: strin
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const limit = await checkRateLimit(supabase, 'generate');
+  if (!limit.allowed) return rateLimitResponse('generate', limit);
 
   const note = await noteService.get(supabase, id).catch(() => null);
   if (!note || note.user_id !== user.id) {

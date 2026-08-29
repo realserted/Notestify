@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
-import { chatWithTutor } from '@/lib/ai/service';
+import { chatWithTutor, MAX_TUTOR_MESSAGE_CHARS } from '@/lib/ai/service';
+import { ContentBlockedError } from '@/lib/ai/gemini';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
 const schema = z.object({
   conversation_id: z.string().uuid().nullish(),
-  message: z.string().min(1),
+  message: z.string().min(1).max(MAX_TUTOR_MESSAGE_CHARS),
 });
 
 export async function POST(req: NextRequest) {
@@ -14,6 +16,9 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const limit = await checkRateLimit(supabase, 'tutor');
+  if (!limit.allowed) return rateLimitResponse('tutor', limit);
 
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
@@ -45,10 +50,11 @@ export async function POST(req: NextRequest) {
       .from('tutor_messages')
       .select('role, content')
       .eq('conversation_id', conversationId)
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: false })
+      .limit(20);
 
     const reply = await chatWithTutor(
-      (history ?? []) as Array<{ role: 'user' | 'assistant'; content: string }>
+      ((history ?? []) as Array<{ role: 'user' | 'assistant'; content: string }>).reverse()
     );
 
     await supabase.from('tutor_messages').insert({
@@ -69,7 +75,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ conversation_id: conversationId, reply });
   } catch (error) {
     console.error('[ai/tutor]', error);
-    const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ error: message }, { status: 500 });
+
+    if (error instanceof ContentBlockedError) {
+      return NextResponse.json(
+        { error: "I can't help with that one. Try rephrasing, or ask something else." },
+        { status: 422 }
+      );
+    }
+
+    return NextResponse.json({ error: 'The tutor is unavailable right now.' }, { status: 500 });
   }
 }

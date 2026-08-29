@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { generateSummary } from '@/lib/ai/service';
+import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
 const schema = z.object({
-  content: z.string().min(20),
+  content: z.string().min(20).max(100_000),
   document_id: z.string().uuid().optional(),
 });
 
@@ -14,6 +15,9 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const limit = await checkRateLimit(supabase, 'generate');
+  if (!limit.allowed) return rateLimitResponse('generate', limit);
 
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);

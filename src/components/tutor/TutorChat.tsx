@@ -91,8 +91,13 @@ export const TutorChat = () => {
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
       void loadConversations();
     } else {
-      const { error } = await res.json().catch(() => ({ error: 'Unknown error' }));
-      setMessages((prev) => [...prev, { role: 'assistant', content: `Error: ${error}` }]);
+      // 429 and 422 carry a message written for the student; show it as-is
+      // rather than prefixing it like a crash.
+      const { error } = await res
+        .json()
+        .catch(() => ({ error: 'Something went wrong. Please try again.' }));
+      const text = typeof error === 'string' ? error : 'Something went wrong. Please try again.';
+      setMessages((prev) => [...prev, { role: 'assistant', content: text }]);
     }
   };
 
