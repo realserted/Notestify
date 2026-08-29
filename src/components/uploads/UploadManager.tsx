@@ -14,6 +14,12 @@ interface Props {
 
 type ProcessingAction = 'extract' | 'summarize';
 
+const STATUS_CHIPS: Record<string, string> = {
+  ready: 'bg-olive-300 text-espresso-700',
+  processing: 'bg-citrus-500 text-espresso-700',
+  failed: 'bg-clay-500 text-espresso-700',
+};
+
 export const UploadManager = ({ initialDocuments }: Props) => {
   const supabase = createClient();
   const [documents, setDocuments] = useState(initialDocuments);
@@ -95,19 +101,24 @@ export const UploadManager = ({ initialDocuments }: Props) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Uploads</h1>
-        <label className="cursor-pointer">
+    <div className="space-y-5">
+      <h1 className="font-display text-[30px] font-extrabold tracking-[-0.03em]">Uploads</h1>
+
+      <div className="rounded-pop border-2 border-dashed border-paper-300 bg-paper-50 p-[38px] text-center dark:border-night-600 dark:bg-night-800">
+        <p className="font-display text-xl font-bold tracking-[-0.02em]">Drop a PDF here</p>
+        <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-bark-500 dark:text-bark-300">
+          Max 25 MB · extract the text once it&apos;s uploaded
+        </p>
+        <label className="mt-[18px] inline-block cursor-pointer">
           <input
             type="file"
             accept="application/pdf"
-            className="hidden"
+            className="sr-only"
             onChange={handleUpload}
             disabled={uploading}
           />
-          <span className="inline-flex h-10 items-center rounded-md bg-coral-500 px-4 text-sm font-medium text-white hover:bg-coral-600">
-            {uploading ? 'Uploading…' : '+ Upload PDF'}
+          <span className="inline-flex h-11 items-center rounded-full border-2 border-espresso-700 bg-paper-50 px-5 text-sm font-bold text-espresso-700 transition-colors hover:bg-paper-200 dark:border-night-600 dark:bg-night-800 dark:text-foam-50 dark:hover:bg-night-700">
+            {uploading ? 'Uploading…' : 'Choose a file'}
           </span>
         </label>
       </div>
@@ -116,7 +127,7 @@ export const UploadManager = ({ initialDocuments }: Props) => {
 
       {documents.length === 0 ? (
         <Card>
-          <p className="text-ink-500">No documents yet.</p>
+          <p className="text-bark-500 dark:text-bark-300">No documents yet.</p>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -124,14 +135,20 @@ export const UploadManager = ({ initialDocuments }: Props) => {
             <Card key={doc.id}>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{doc.title}</p>
-                  <p className="text-sm text-ink-500">Status: {doc.status}</p>
+                  <p className="truncate font-bold">{doc.title}</p>
+                  <span
+                    className={`mt-1.5 inline-block rounded-full border-2 border-espresso-700 px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.1em] dark:border-espresso-900 ${
+                      STATUS_CHIPS[doc.status] ?? STATUS_CHIPS.processing
+                    }`}
+                  >
+                    {doc.status}
+                  </span>
                   {doc.summary && (
                     <details className="mt-2">
-                      <summary className="cursor-pointer text-sm text-coral-500">
+                      <summary className="cursor-pointer text-sm font-semibold text-citrus-600 dark:text-citrus-500">
                         View summary
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-sans text-sm text-ink-700 dark:text-cream-50/80">
+                      <pre className="mt-2 whitespace-pre-wrap font-sans text-sm text-bark-700 dark:text-foam-50/80">
                         {doc.summary}
                       </pre>
                     </details>

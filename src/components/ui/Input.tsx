@@ -8,11 +8,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, id, ...props }, ref) => (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       {label && (
         <label
           htmlFor={id}
-          className="block text-sm font-medium text-ink-700 dark:text-cream-50"
+          className="block text-xs font-bold uppercase tracking-wider text-bark-500 dark:text-bark-300"
         >
           {label}
         </label>
@@ -21,15 +21,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         id={id}
         className={cn(
-          'w-full rounded-lg border border-cream-200 bg-white px-3 py-2 text-base text-ink-900 outline-none transition-colors focus:border-coral-500 focus:ring-1 focus:ring-coral-500 sm:text-sm',
-          'placeholder:text-ink-500/60',
-          'dark:border-ink-700 dark:bg-ink-900 dark:text-cream-50 dark:placeholder:text-cream-50/40 dark:focus:border-coral-500 dark:focus:ring-coral-500',
-          error && 'border-red-500 dark:border-red-500',
+          'w-full rounded-pop border-2 border-espresso-700 bg-paper-50 px-4 py-2.5 text-base text-espresso-700 outline-none transition-shadow sm:text-sm',
+          'placeholder:text-bark-500/70',
+          'focus:shadow-pop-sm',
+          'dark:border-night-600 dark:bg-night-800 dark:text-foam-50 dark:placeholder:text-bark-300/60 dark:focus:shadow-pop-dark',
+          error && 'border-clay-500 dark:border-clay-300',
           className
         )}
         {...props}
       />
-      {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
+      {error && <p className="text-xs font-semibold text-clay-500 dark:text-clay-300">{error}</p>}
     </div>
   )
 );

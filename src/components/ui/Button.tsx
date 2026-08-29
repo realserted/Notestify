@@ -6,29 +6,40 @@ import { cn } from '@/utils/cn';
 type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
+// Every filled/outlined variant carries the 2px ink border. Primary and danger
+// also carry the hard offset shadow and press into it on :active.
+const variants: Record<Variant, string> = {
+  primary:
+    'border-2 border-espresso-700 bg-espresso-500 text-paper-50 shadow-pop-sm hover:bg-espresso-700 ' +
+    'active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ' +
+    'dark:border-espresso-900 dark:bg-citrus-500 dark:text-espresso-900 dark:shadow-pop-dark dark:hover:bg-citrus-300',
+  secondary:
+    'border-2 border-espresso-700 bg-citrus-500 text-espresso-700 shadow-pop-sm hover:bg-citrus-300 ' +
+    'active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ' +
+    'dark:border-espresso-900 dark:shadow-pop-dark',
+  outline:
+    'border-2 border-espresso-700 bg-paper-50 text-espresso-700 hover:bg-paper-200 ' +
+    'dark:border-night-600 dark:bg-night-800 dark:text-foam-50 dark:hover:bg-night-700',
+  ghost:
+    'border-2 border-transparent text-bark-700 hover:bg-paper-200 ' +
+    'dark:text-foam-50 dark:hover:bg-night-700',
+  danger:
+    'border-2 border-espresso-700 bg-clay-500 text-paper-50 shadow-pop-sm hover:brightness-110 ' +
+    'active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ' +
+    'dark:border-espresso-900 dark:shadow-pop-dark',
+};
+
+const sizes: Record<Size, string> = {
+  sm: 'h-9 px-4 text-sm',
+  md: 'h-11 px-5 text-sm',
+  lg: 'h-13 px-7 text-base',
+};
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
   loading?: boolean;
 }
-
-const variants: Record<Variant, string> = {
-  primary:
-    'bg-coral-500 text-white hover:bg-coral-600 disabled:bg-coral-500/50 dark:hover:bg-coral-600',
-  secondary:
-    'bg-cream-100 text-ink-900 hover:bg-cream-200 dark:bg-ink-700 dark:text-cream-50 dark:hover:bg-ink-700/80',
-  outline:
-    'border border-cream-200 text-ink-700 hover:bg-cream-100 dark:border-ink-700 dark:text-cream-50 dark:hover:bg-ink-700/40',
-  ghost:
-    'text-ink-700 hover:bg-cream-100 dark:text-cream-50 dark:hover:bg-ink-700/40',
-  danger: 'bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-400',
-};
-
-const sizes: Record<Size, string> = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
-};
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', loading, disabled, children, ...props }, ref) => (
@@ -36,7 +47,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       disabled={loading || disabled}
       className={cn(
-        'inline-flex items-center justify-center rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60',
+        'inline-flex items-center justify-center rounded-full font-bold transition-all duration-100',
+        'disabled:cursor-not-allowed disabled:opacity-60 disabled:active:translate-x-0 disabled:active:translate-y-0',
         variants[variant],
         sizes[size],
         className

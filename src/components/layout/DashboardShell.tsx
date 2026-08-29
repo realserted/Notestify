@@ -9,14 +9,17 @@ export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
   const close = () => setOpen(false);
 
   return (
-    <div className="flex min-h-[100dvh] flex-col md:flex-row">
-      <header className="flex h-14 items-center justify-between border-b border-cream-200 bg-cream-50/95 px-4 backdrop-blur dark:border-ink-700 dark:bg-ink-900/95 md:hidden">
-        <h1 className="font-serif text-lg tracking-tight">Notestify</h1>
+    <div className="flex min-h-[100dvh] flex-col bg-paper-100 dark:bg-night-900 md:flex-row">
+      <header className="flex h-14 items-center justify-between border-b-2 border-espresso-700 bg-paper-50 px-4 dark:border-night-600 dark:bg-night-800 md:hidden">
+        <div className="flex items-center gap-2.5">
+          <span className="h-3.5 w-3.5 rounded-[5px] border-2 border-espresso-700 bg-citrus-500 dark:border-espresso-900" />
+          <h1 className="font-display text-lg font-bold tracking-tight">Notestify</h1>
+        </div>
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          className="-mr-2 inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink-700 transition-colors hover:bg-cream-100 dark:text-cream-50 dark:hover:bg-ink-700/40"
+          className="-mr-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-bark-700 transition-colors hover:bg-paper-200 dark:text-foam-50 dark:hover:bg-night-700"
         >
           <Menu size={22} />
         </button>
@@ -27,7 +30,7 @@ export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
           type="button"
           aria-label="Close menu"
           onClick={close}
-          className="fixed inset-0 z-40 bg-ink-900/40 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-espresso-900/50 md:hidden"
         />
       )}
 

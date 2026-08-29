@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Card } from '@/components/ui/Card';
 import { GoogleButton } from '@/components/auth/GoogleButton';
+import { AuthSplit } from '@/components/auth/AuthSplit';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -34,15 +34,14 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8">
-        <h1 className="mb-2 font-serif text-3xl tracking-tight text-ink-900 dark:text-cream-50">
-          Create your account
-        </h1>
-        <p className="mb-6 text-sm text-ink-500 dark:text-cream-50/60">
-          Study smarter in just a few seconds.
-        </p>
-        <form onSubmit={handleRegister} className="space-y-4">
+    <AuthSplit>
+      <h1 className="font-display text-[34px] font-extrabold tracking-[-0.03em]">
+        Create your account
+      </h1>
+      <p className="mb-8 mt-1.5 text-sm text-bark-500 dark:text-bark-300">
+        Study smarter in just a few seconds.
+      </p>
+      <form onSubmit={handleRegister} className="space-y-4">
           <Input
             label="Full name"
             value={fullName}
@@ -64,24 +63,28 @@ export default function RegisterPage() {
             required
             minLength={6}
           />
-          {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-          <Button type="submit" className="w-full" loading={loading}>
-            Create account
-          </Button>
-        </form>
-        <div className="my-4 flex items-center gap-3 text-xs text-ink-500 dark:text-cream-50/50">
-          <span className="h-px flex-1 bg-cream-200 dark:bg-ink-700" />
-          or
-          <span className="h-px flex-1 bg-cream-200 dark:bg-ink-700" />
-        </div>
-        <GoogleButton onError={setError} />
-        <p className="mt-6 text-center text-sm text-ink-500 dark:text-cream-50/70">
-          Already have an account?{' '}
-          <Link href="/login" className="font-medium text-coral-500 hover:text-coral-600 hover:underline">
-            Sign in
-          </Link>
-        </p>
-      </Card>
-    </div>
+        {error && (
+          <p className="text-sm font-semibold text-clay-500 dark:text-clay-300">{error}</p>
+        )}
+        <Button type="submit" className="w-full" loading={loading}>
+          Create account
+        </Button>
+      </form>
+      <div className="my-5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] text-bark-500 dark:text-bark-300">
+        <span className="h-0.5 flex-1 bg-paper-300 dark:bg-night-600" />
+        or
+        <span className="h-0.5 flex-1 bg-paper-300 dark:bg-night-600" />
+      </div>
+      <GoogleButton onError={setError} />
+      <p className="mt-7 text-center text-sm text-bark-500 dark:text-bark-300">
+        Already have an account?{' '}
+        <Link
+          href="/login"
+          className="font-bold text-citrus-600 underline decoration-2 underline-offset-2 dark:text-citrus-500"
+        >
+          Sign in
+        </Link>
+      </p>
+    </AuthSplit>
   );
 }

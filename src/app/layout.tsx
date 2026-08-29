@@ -1,13 +1,21 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces } from 'next/font/google';
+import { Bricolage_Grotesque, Plus_Jakarta_Sans } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import './globals.css';
 
-const fraunces = Fraunces({
+// Replaces Fraunces. Bricolage is the display face; Plus Jakarta Sans is body + UI.
+const display = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-display',
   display: 'swap',
-  axes: ['opsz', 'SOFT'],
+  weight: ['600', '700', '800'],
+});
+
+const sans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -20,8 +28,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: 'cover',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAF9F5' },
-    { media: '(prefers-color-scheme: dark)', color: '#1F1E1D' },
+    { media: '(prefers-color-scheme: light)', color: '#F7E9D6' },
+    { media: '(prefers-color-scheme: dark)', color: '#1A0F08' },
   ],
 };
 
@@ -31,11 +39,11 @@ const themeInitScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={fraunces.variable} suppressHydrationWarning>
+    <html lang="en" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-screen bg-cream-50 text-ink-900 antialiased dark:bg-ink-900 dark:text-cream-50">
+      <body className="min-h-screen bg-paper-100 font-sans text-espresso-700 antialiased dark:bg-night-900 dark:text-foam-50">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

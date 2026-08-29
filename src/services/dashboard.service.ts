@@ -1,30 +1,54 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+/** A card counts as mature once SM-2 has pushed its interval past three weeks. */
+const MATURE_INTERVAL_DAYS = 21;
+
+export interface DeckDue {
+  id: string;
+  title: string;
+  due: number;
+  total: number;
+}
+
 export interface DashboardStats {
   totalDecks: number;
   totalFlashcards: number;
   dueToday: number;
+  /** How many distinct decks have at least one card due. */
+  dueDeckCount: number;
+  /** Cards with an interval of 21+ days. */
+  matureCards: number;
   streak: number;
+  /** Reviews logged today — drives the "Today's goal" panel. */
+  reviewedToday: number;
+  /** Reviews per day for the last 7 days, oldest first. */
+  weekReviews: Array<{ day: string; count: number }>;
+  /** Decks with cards due, most due first. */
+  dueDecks: DeckDue[];
   recentAttempts: Array<{ id: string; quiz_id: string; score: number; completed_at: string }>;
   weakTopics: Array<{ deck_id: string; deck_title: string; accuracy: number }>;
 }
 
+/** Local-date key. Streaks and daily counts have to follow the user's calendar,
+ *  not UTC, or a late-night review lands on the wrong day. */
+const dayKey = (d: Date): string =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
 const computeStreak = (reviewDates: string[]): number => {
   if (reviewDates.length === 0) return 0;
 
-  const uniqueDays = new Set(reviewDates.map((d) => d.slice(0, 10)));
+  const uniqueDays = new Set(reviewDates.map((d) => dayKey(new Date(d))));
   let streak = 0;
   const cursor = new Date();
 
   while (true) {
-    const key = cursor.toISOString().slice(0, 10);
+    const key = dayKey(cursor);
     if (uniqueDays.has(key)) {
       streak += 1;
       cursor.setDate(cursor.getDate() - 1);
     } else if (streak === 0) {
       cursor.setDate(cursor.getDate() - 1);
-      const yKey = cursor.toISOString().slice(0, 10);
-      if (!uniqueDays.has(yKey)) break;
+      if (!uniqueDays.has(dayKey(cursor))) break;
     } else {
       break;
     }
@@ -34,22 +58,17 @@ const computeStreak = (reviewDates: string[]): number => {
 
 export const dashboardService = {
   getStats: async (supabase: SupabaseClient, userId: string): Promise<DashboardStats> => {
-    const nowIso = new Date().toISOString();
+    const now = new Date();
+    const nowIso = now.toISOString();
 
-    const [
-      { count: totalDecks },
-      { count: totalFlashcards },
-      { count: dueToday },
-      logs,
-      attempts,
-    ] = await Promise.all([
-      supabase.from('decks').select('*', { count: 'exact', head: true }).eq('user_id', userId),
-      supabase.from('flashcards').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+    const [decksRes, cardsRes, logs, attempts] = await Promise.all([
+      supabase.from('decks').select('id, title').eq('user_id', userId),
+      // One pass over the cards gives totals, due counts, maturity and the
+      // per-deck breakdown — cheaper than four separate count queries.
       supabase
         .from('flashcards')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .lte('due_date', nowIso),
+        .select('deck_id, due_date, interval_days')
+        .eq('user_id', userId),
       supabase
         .from('review_logs')
         .select('reviewed_at')
@@ -64,9 +83,48 @@ export const dashboardService = {
         .limit(5),
     ]);
 
-    const streak = computeStreak(
-      (logs.data ?? []).map((l: { reviewed_at: string }) => l.reviewed_at)
-    );
+    const decks = (decksRes.data ?? []) as Array<{ id: string; title: string }>;
+    const cards = (cardsRes.data ?? []) as Array<{
+      deck_id: string;
+      due_date: string;
+      interval_days: number;
+    }>;
+
+    let dueToday = 0;
+    let matureCards = 0;
+    const perDeck = new Map<string, { due: number; total: number }>();
+
+    for (const card of cards) {
+      const isDue = card.due_date <= nowIso;
+      if (isDue) dueToday += 1;
+      if (card.interval_days >= MATURE_INTERVAL_DAYS) matureCards += 1;
+
+      const entry = perDeck.get(card.deck_id) ?? { due: 0, total: 0 };
+      entry.total += 1;
+      if (isDue) entry.due += 1;
+      perDeck.set(card.deck_id, entry);
+    }
+
+    const dueDecks: DeckDue[] = decks
+      .map((d) => ({ id: d.id, title: d.title, ...(perDeck.get(d.id) ?? { due: 0, total: 0 }) }))
+      .filter((d) => d.due > 0)
+      .sort((a, b) => b.due - a.due);
+
+    const reviewDates = (logs.data ?? []).map((l: { reviewed_at: string }) => l.reviewed_at);
+    const reviewsByDay = new Map<string, number>();
+    for (const iso of reviewDates) {
+      const key = dayKey(new Date(iso));
+      reviewsByDay.set(key, (reviewsByDay.get(key) ?? 0) + 1);
+    }
+
+    const weekReviews = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      return {
+        day: ['S', 'M', 'T', 'W', 'T', 'F', 'S'][d.getDay()],
+        count: reviewsByDay.get(dayKey(d)) ?? 0,
+      };
+    });
 
     const { data: weakData } = await supabase
       .from('quiz_attempts')
@@ -98,10 +156,15 @@ export const dashboardService = {
       .slice(0, 5);
 
     return {
-      totalDecks: totalDecks ?? 0,
-      totalFlashcards: totalFlashcards ?? 0,
-      dueToday: dueToday ?? 0,
-      streak,
+      totalDecks: decks.length,
+      totalFlashcards: cards.length,
+      dueToday,
+      dueDeckCount: dueDecks.length,
+      matureCards,
+      streak: computeStreak(reviewDates),
+      reviewedToday: reviewsByDay.get(dayKey(now)) ?? 0,
+      weekReviews,
+      dueDecks,
       recentAttempts: attempts.data ?? [],
       weakTopics,
     };

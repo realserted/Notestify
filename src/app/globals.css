@@ -3,209 +3,142 @@
 @tailwind utilities;
 
 @keyframes progress-indeterminate {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(300%);
-  }
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
 }
 
-/* Accent background colors — tints body + all surface classes so sidebars,
-   cards, and modals pick up the theme. */
+/* ─────────────────────────────────────────────────────────────
+   Accent background themes.
+   Same five ids as before, retuned to sit inside the cold-brew
+   system: warm, low-chroma pages that never fight the citrus.
+   ───────────────────────────────────────────────────────────── */
+
 html[data-bg='pink']:not(.dark) body,
-html[data-bg='pink']:not(.dark) .bg-cream-50 {
-  background-color: #fdf2f8;
-}
-html[data-bg='pink']:not(.dark) .bg-white {
-  background-color: #fff5f9;
-}
-html[data-bg='pink']:not(.dark) .bg-cream-100 {
-  background-color: #fce7f3;
-}
+html[data-bg='pink']:not(.dark) .bg-cream-50,
+html[data-bg='pink']:not(.dark) .bg-paper-100 { background-color: #F8E4DC; }
+html[data-bg='pink']:not(.dark) .bg-white,
+html[data-bg='pink']:not(.dark) .bg-paper-50 { background-color: #FFF7F3; }
 html[data-bg='pink'].dark body,
-html[data-bg='pink'].dark .bg-ink-900,
-html[data-bg='pink'].dark .dark\:bg-ink-900 {
-  background-color: #2a1a22;
-}
-html[data-bg='pink'].dark .bg-ink-900\/80,
-html[data-bg='pink'].dark .dark\:bg-ink-900\/80 {
-  background-color: rgba(46, 28, 37, 0.9);
-}
+html[data-bg='pink'].dark .bg-night-900,
+html[data-bg='pink'].dark .dark\:bg-night-900 { background-color: #23100C; }
 
 html[data-bg='blue']:not(.dark) body,
-html[data-bg='blue']:not(.dark) .bg-cream-50 {
-  background-color: #eff6ff;
-}
-html[data-bg='blue']:not(.dark) .bg-white {
-  background-color: #f5f9ff;
-}
-html[data-bg='blue']:not(.dark) .bg-cream-100 {
-  background-color: #dbeafe;
-}
+html[data-bg='blue']:not(.dark) .bg-cream-50,
+html[data-bg='blue']:not(.dark) .bg-paper-100 { background-color: #E3E7E6; }
+html[data-bg='blue']:not(.dark) .bg-white,
+html[data-bg='blue']:not(.dark) .bg-paper-50 { background-color: #F6F8F8; }
 html[data-bg='blue'].dark body,
-html[data-bg='blue'].dark .bg-ink-900,
-html[data-bg='blue'].dark .dark\:bg-ink-900 {
-  background-color: #182132;
-}
-html[data-bg='blue'].dark .bg-ink-900\/80,
-html[data-bg='blue'].dark .dark\:bg-ink-900\/80 {
-  background-color: rgba(26, 36, 56, 0.9);
-}
+html[data-bg='blue'].dark .bg-night-900,
+html[data-bg='blue'].dark .dark\:bg-night-900 { background-color: #101A1B; }
 
 html[data-bg='green']:not(.dark) body,
-html[data-bg='green']:not(.dark) .bg-cream-50 {
-  background-color: #f0fdf4;
-}
-html[data-bg='green']:not(.dark) .bg-white {
-  background-color: #f5fdf7;
-}
-html[data-bg='green']:not(.dark) .bg-cream-100 {
-  background-color: #dcfce7;
-}
+html[data-bg='green']:not(.dark) .bg-cream-50,
+html[data-bg='green']:not(.dark) .bg-paper-100 { background-color: #E9EBD9; }
+html[data-bg='green']:not(.dark) .bg-white,
+html[data-bg='green']:not(.dark) .bg-paper-50 { background-color: #F8F9F0; }
 html[data-bg='green'].dark body,
-html[data-bg='green'].dark .bg-ink-900,
-html[data-bg='green'].dark .dark\:bg-ink-900 {
-  background-color: #152720;
-}
-html[data-bg='green'].dark .bg-ink-900\/80,
-html[data-bg='green'].dark .dark\:bg-ink-900\/80 {
-  background-color: rgba(22, 43, 35, 0.9);
-}
+html[data-bg='green'].dark .bg-night-900,
+html[data-bg='green'].dark .dark\:bg-night-900 { background-color: #161B0F; }
 
 html[data-bg='yellow']:not(.dark) body,
-html[data-bg='yellow']:not(.dark) .bg-cream-50 {
-  background-color: #fefce8;
-}
-html[data-bg='yellow']:not(.dark) .bg-white {
-  background-color: #fffef5;
-}
-html[data-bg='yellow']:not(.dark) .bg-cream-100 {
-  background-color: #fef9c3;
-}
+html[data-bg='yellow']:not(.dark) .bg-cream-50,
+html[data-bg='yellow']:not(.dark) .bg-paper-100 { background-color: #FAEECB; }
+html[data-bg='yellow']:not(.dark) .bg-white,
+html[data-bg='yellow']:not(.dark) .bg-paper-50 { background-color: #FFFAEA; }
 html[data-bg='yellow'].dark body,
-html[data-bg='yellow'].dark .bg-ink-900,
-html[data-bg='yellow'].dark .dark\:bg-ink-900 {
-  background-color: #26221a;
-}
-html[data-bg='yellow'].dark .bg-ink-900\/80,
-html[data-bg='yellow'].dark .dark\:bg-ink-900\/80 {
-  background-color: rgba(42, 38, 28, 0.9);
-}
+html[data-bg='yellow'].dark .bg-night-900,
+html[data-bg='yellow'].dark .dark\:bg-night-900 { background-color: #201709; }
 
 html[data-bg='orange']:not(.dark) body,
-html[data-bg='orange']:not(.dark) .bg-cream-50 {
-  background-color: #fff7ed;
-}
-html[data-bg='orange']:not(.dark) .bg-white {
-  background-color: #fffaf5;
-}
-html[data-bg='orange']:not(.dark) .bg-cream-100 {
-  background-color: #fed7aa;
-}
+html[data-bg='orange']:not(.dark) .bg-cream-50,
+html[data-bg='orange']:not(.dark) .bg-paper-100 { background-color: #F7E9D6; }
+html[data-bg='orange']:not(.dark) .bg-white,
+html[data-bg='orange']:not(.dark) .bg-paper-50 { background-color: #FFFBF4; }
 html[data-bg='orange'].dark body,
-html[data-bg='orange'].dark .bg-ink-900,
-html[data-bg='orange'].dark .dark\:bg-ink-900 {
-  background-color: #2a1f18;
-}
-html[data-bg='orange'].dark .bg-ink-900\/80,
-html[data-bg='orange'].dark .dark\:bg-ink-900\/80 {
-  background-color: rgba(48, 34, 24, 0.9);
-}
+html[data-bg='orange'].dark .bg-night-900,
+html[data-bg='orange'].dark .dark\:bg-night-900 { background-color: #1A0F08; }
+
+/* Surfaces still on the legacy `ink-900/80` token (annotation toolbars, note
+   tool palette). Kept tinting until those migrate to `night-800`. */
+html[data-bg='pink'].dark .dark\:bg-ink-900\/80 { background-color: rgba(35, 16, 12, 0.9); }
+html[data-bg='blue'].dark .dark\:bg-ink-900\/80 { background-color: rgba(16, 26, 27, 0.9); }
+html[data-bg='green'].dark .dark\:bg-ink-900\/80 { background-color: rgba(22, 27, 15, 0.9); }
+html[data-bg='yellow'].dark .dark\:bg-ink-900\/80 { background-color: rgba(32, 23, 9, 0.9); }
+html[data-bg='orange'].dark .dark\:bg-ink-900\/80 { background-color: rgba(26, 15, 8, 0.9); }
+
+/* ─────────────────────────────────────────────────────────────
+   Feature tour (driver.js) — restyled to match the new chrome:
+   2px ink border, hard offset shadow, no blur.
+   ───────────────────────────────────────────────────────────── */
 
 .notestify-tour.driver-popover {
-  background: #ffffff;
-  color: #1f1e1d;
-  border: 1px solid #ede6d8;
+  background: #FFFBF4;
+  color: #2E1A0E;
+  border: 2px solid #2E1A0E;
   border-radius: 16px;
   padding: 18px;
-  box-shadow: 0 20px 40px -12px rgba(31, 30, 29, 0.18);
+  box-shadow: 5px 5px 0 #2E1A0E;
   font-family: inherit;
 }
 .dark .notestify-tour.driver-popover {
-  background: #1f1e1d;
-  color: #faf9f5;
-  border-color: #3d3d3a;
-  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+  background: #241609;
+  color: #F5E7D5;
+  border-color: #4A3421;
+  box-shadow: 5px 5px 0 #0E0805;
 }
 .notestify-tour .driver-popover-title {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   color: inherit;
   margin-bottom: 6px;
 }
-.notestify-tour .driver-popover-description {
-  font-size: 14px;
-  line-height: 1.55;
-  color: #5c5b57;
-}
-.dark .notestify-tour .driver-popover-description {
-  color: rgba(250, 249, 245, 0.75);
-}
-.notestify-tour .driver-popover-progress-text {
-  color: #5c5b57;
-  font-size: 12px;
-}
-.dark .notestify-tour .driver-popover-progress-text {
-  color: rgba(250, 249, 245, 0.6);
-}
+.notestify-tour .driver-popover-description { font-size: 14px; line-height: 1.55; color: #5A4331; }
+.dark .notestify-tour .driver-popover-description { color: #A98D71; }
+.notestify-tour .driver-popover-progress-text { color: #8A6E55; font-size: 12px; }
+.dark .notestify-tour .driver-popover-progress-text { color: #A98D71; }
+
 .notestify-tour .driver-popover-next-btn,
 .notestify-tour .driver-popover-prev-btn,
 .notestify-tour .driver-popover-close-btn {
   font-family: inherit;
   font-size: 13px;
-  font-weight: 500;
-  border-radius: 8px;
-  padding: 6px 12px;
-  border: none;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 7px 14px;
+  border: 2px solid transparent;
   text-shadow: none;
   background: transparent;
-  color: #3d3d3a;
+  color: #5A4331;
   transition: background-color 150ms;
 }
 .dark .notestify-tour .driver-popover-next-btn,
 .dark .notestify-tour .driver-popover-prev-btn,
-.dark .notestify-tour .driver-popover-close-btn {
-  color: #faf9f5;
-}
+.dark .notestify-tour .driver-popover-close-btn { color: #F5E7D5; }
 .notestify-tour .driver-popover-next-btn {
-  background: #d97757;
-  color: #ffffff;
+  background: #3A2112;
+  color: #FFF6E9;
+  border-color: #2E1A0E;
+  box-shadow: 3px 3px 0 #2E1A0E;
 }
-.notestify-tour .driver-popover-next-btn:hover {
-  background: #c15f3c;
+.notestify-tour .driver-popover-next-btn:hover { background: #2E1A0E; }
+.dark .notestify-tour .driver-popover-next-btn {
+  background: #F2A61E;
+  color: #1A0F08;
+  border-color: #0E0805;
+  box-shadow: 3px 3px 0 #0E0805;
 }
 .notestify-tour .driver-popover-prev-btn:hover,
-.notestify-tour .driver-popover-close-btn:hover {
-  background: #f4ede4;
-}
+.notestify-tour .driver-popover-close-btn:hover { background: #EFE0CB; }
 .dark .notestify-tour .driver-popover-prev-btn:hover,
-.dark .notestify-tour .driver-popover-close-btn:hover {
-  background: rgba(61, 61, 58, 0.5);
-}
-.notestify-tour .driver-popover-arrow-side-right.driver-popover-arrow {
-  border-right-color: #ffffff;
-}
-.dark .notestify-tour .driver-popover-arrow-side-right.driver-popover-arrow {
-  border-right-color: #1f1e1d;
-}
-.notestify-tour .driver-popover-arrow-side-left.driver-popover-arrow {
-  border-left-color: #ffffff;
-}
-.dark .notestify-tour .driver-popover-arrow-side-left.driver-popover-arrow {
-  border-left-color: #1f1e1d;
-}
-.notestify-tour .driver-popover-arrow-side-top.driver-popover-arrow {
-  border-top-color: #ffffff;
-}
-.dark .notestify-tour .driver-popover-arrow-side-top.driver-popover-arrow {
-  border-top-color: #1f1e1d;
-}
-.notestify-tour .driver-popover-arrow-side-bottom.driver-popover-arrow {
-  border-bottom-color: #ffffff;
-}
-.dark .notestify-tour .driver-popover-arrow-side-bottom.driver-popover-arrow {
-  border-bottom-color: #1f1e1d;
-}
+.dark .notestify-tour .driver-popover-close-btn:hover { background: #2E1D0E; }
+
+.notestify-tour .driver-popover-arrow-side-right.driver-popover-arrow { border-right-color: #FFFBF4; }
+.dark .notestify-tour .driver-popover-arrow-side-right.driver-popover-arrow { border-right-color: #241609; }
+.notestify-tour .driver-popover-arrow-side-left.driver-popover-arrow { border-left-color: #FFFBF4; }
+.dark .notestify-tour .driver-popover-arrow-side-left.driver-popover-arrow { border-left-color: #241609; }
+.notestify-tour .driver-popover-arrow-side-top.driver-popover-arrow { border-top-color: #FFFBF4; }
+.dark .notestify-tour .driver-popover-arrow-side-top.driver-popover-arrow { border-top-color: #241609; }
+.notestify-tour .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: #FFFBF4; }
+.dark .notestify-tour .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: #241609; }
