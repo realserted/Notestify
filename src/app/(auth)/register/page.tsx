@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
+import { GoogleButton } from '@/components/auth/GoogleButton';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -68,6 +69,12 @@ export default function RegisterPage() {
             Create account
           </Button>
         </form>
+        <div className="my-4 flex items-center gap-3 text-xs text-ink-500 dark:text-cream-50/50">
+          <span className="h-px flex-1 bg-cream-200 dark:bg-ink-700" />
+          or
+          <span className="h-px flex-1 bg-cream-200 dark:bg-ink-700" />
+        </div>
+        <GoogleButton onError={setError} />
         <p className="mt-6 text-center text-sm text-ink-500 dark:text-cream-50/70">
           Already have an account?{' '}
           <Link href="/login" className="font-medium text-coral-500 hover:text-coral-600 hover:underline">
