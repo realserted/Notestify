@@ -29,9 +29,9 @@ export default function TermsPage() {
         <p>
           You keep ownership of everything you upload and create. You grant us only the permission
           needed to actually run the service: to store your content, display it back to you, and
-          send it to our AI provider when you use a feature that requires it. We do not use your
-          content to train AI models, and we do not share it with anyone beyond the providers listed
-          in the{' '}
+          send it to our AI provider when you use a feature that requires it. We do not train
+          models on your content ourselves, and we do not share it with anyone beyond the providers
+          listed in the{' '}
           <Link
             href="/privacy"
             className="font-semibold text-citrus-600 underline decoration-2 underline-offset-2 dark:text-citrus-500"
@@ -39,6 +39,12 @@ export default function TermsPage() {
             Privacy Policy
           </Link>
           .
+        </p>
+        <p>
+          Our AI provider is a separate matter. Notestify currently runs on Google&apos;s free
+          Gemini API tier, and on that tier Google may use content sent to it to improve their
+          products, including review by people. We cannot promise otherwise on your behalf. If that
+          is not acceptable for a particular document, do not run AI features on it.
         </p>
       </Section>
 

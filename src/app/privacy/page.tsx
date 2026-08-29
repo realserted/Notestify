@@ -68,8 +68,15 @@ export default function PrivacyPage() {
           <p className="mt-2">
             When you generate flashcards, quizzes, or a summary, the relevant text is sent to
             Google&apos;s Gemini API. When you use the AI tutor, your messages and the recent
-            history of that conversation are sent too. If a document contains something you would
-            not want processed by a third party, do not run AI features on it.
+            history of that conversation are sent too — along with any deck, note, or document you
+            attach to the session.
+          </p>
+          <p className="mt-2">
+            Notestify runs on Google&apos;s free Gemini API tier. On that tier Google may use the
+            content sent to it to improve their products, and it may be reviewed by people. That is
+            Google&apos;s policy, not ours, and we cannot waive it for you. If a document contains
+            something you would not want a third party to process or read, do not run AI features
+            on it.
           </p>
         </Notice>
         <p>We rely on these providers to run the service:</p>
@@ -83,7 +90,8 @@ export default function PrivacyPage() {
               <strong className="font-bold text-espresso-700 dark:text-foam-50">
                 Google (Gemini API)
               </strong>{' '}
-              — processes text for the AI features, as described above.
+              — processes text for the AI features. On our current free tier, Google may use
+              that content to improve their products.
             </>,
             <>
               <strong className="font-bold text-espresso-700 dark:text-foam-50">
