@@ -49,7 +49,7 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
   const week = Array.from({ length: 7 }, (_, i) => i < Math.min(streak, 7));
 
   return (
-    <aside className="flex h-[100dvh] w-64 flex-col border-r-2 border-espresso-700 bg-paper-50 dark:border-night-600 dark:bg-night-800 md:h-auto md:w-61">
+    <aside className="flex h-[100dvh] w-64 flex-col overflow-y-auto border-r-2 border-espresso-700 bg-paper-50 dark:border-night-600 dark:bg-night-800 md:h-full md:w-61">
       <div className="flex items-center justify-between p-5">
         <NotestifyLogo size={30} />
         {onNavigate && (
@@ -64,7 +64,7 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
         )}
       </div>
 
-      <nav className="flex-1 space-y-1 px-3">
+      <nav className="space-y-1 px-3">
         {NAV.map(({ href, label, icon: Icon, tourId, dot }) => {
           const active = pathname.startsWith(href);
           return (
@@ -94,7 +94,7 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
         })}
       </nav>
 
-      <div className="space-y-1 px-3 py-3">
+      <div className="mt-3 space-y-1 border-t-2 border-paper-200 px-3 pt-3 dark:border-night-700">
         <TutorialButton className="w-full justify-start" />
         <div data-tour="theme">
           <ThemeToggle className="w-full justify-start" />
@@ -105,7 +105,7 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
       </div>
 
       {streak > 0 && (
-        <div className="mx-3 mb-3 rounded-pop border-2 border-espresso-700 bg-citrus-500 p-4 dark:border-espresso-900">
+        <div className="mx-3 mt-3 rounded-pop border-2 border-espresso-700 bg-citrus-500 p-4 dark:border-espresso-900">
           <p className="font-display text-3xl font-bold leading-none text-espresso-700">{streak}</p>
           <p className="mt-1 text-xs font-semibold text-espresso-700">day streak</p>
           <div className="mt-3 flex gap-1.5" aria-hidden>
@@ -121,7 +121,7 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 px-6 py-4 text-sm font-semibold text-bark-500 transition-colors hover:bg-paper-200 dark:text-bark-300 dark:hover:bg-night-700"
+        className="mt-1 flex items-center gap-3 px-6 py-3 text-sm font-semibold text-bark-500 transition-colors hover:bg-paper-200 dark:text-bark-300 dark:hover:bg-night-700"
       >
         <LogOut size={18} />
         Sign out

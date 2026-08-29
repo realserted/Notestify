@@ -32,15 +32,17 @@ export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
         />
       )}
 
+      {/* Drawer on mobile; on desktop it sticks to the viewport so the nav and
+          the utilities below it stay reachable however long the page gets. */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-200 md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-200 md:sticky md:top-0 md:bottom-auto md:flex md:h-[100dvh] md:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <Sidebar onNavigate={close} />
       </div>
 
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
+      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
     </div>
   );
 };

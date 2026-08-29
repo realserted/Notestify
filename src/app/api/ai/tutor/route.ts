@@ -58,6 +58,14 @@ export async function POST(req: NextRequest) {
       content: reply,
     });
 
+    // Messages live in their own table, so the conversation row needs an
+    // explicit touch for the history list to sort by recent activity.
+    await supabase
+      .from('tutor_conversations')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', conversationId)
+      .eq('user_id', user.id);
+
     return NextResponse.json({ conversation_id: conversationId, reply });
   } catch (error) {
     console.error('[ai/tutor]', error);
