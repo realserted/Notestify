@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 export const Skeleton = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'animate-pulse rounded-md bg-cream-100 dark:bg-ink-700/50',
+      'animate-pulse rounded-md bg-paper-200 dark:bg-night-700',
       className
     )}
     {...props}
