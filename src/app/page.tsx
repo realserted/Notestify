@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 // Copy is unchanged from the previous landing page; only the strip colour is new.
 const features = [
@@ -48,7 +49,8 @@ export default async function HomePage() {
         <Link href="/" aria-label="Notestify home">
           <NotestifyLogo size={34} />
         </Link>
-        <nav className="flex items-center gap-5">
+        <nav className="flex items-center gap-4">
+          <ThemeToggle iconOnly />
           <Link
             href="/login"
             className="text-sm font-semibold text-bark-700 hover:text-espresso-700 dark:text-foam-50/80 dark:hover:text-foam-50"
@@ -180,7 +182,18 @@ export default async function HomePage() {
       <footer className="border-t-2 border-espresso-700 bg-paper-50 dark:border-night-600 dark:bg-night-800">
         <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-2 px-6 py-5 text-[13px] font-semibold text-bark-500 dark:text-bark-300 sm:flex-row sm:px-11">
           <p>&copy; {new Date().getFullYear()} Notestify</p>
-          <p className="text-espresso-700 dark:text-foam-50">Study smarter.</p>
+          <nav className="flex flex-wrap items-center justify-center gap-5">
+            <Link href="/about" className="hover:text-espresso-700 dark:hover:text-foam-50">
+              About
+            </Link>
+            <Link href="/privacy" className="hover:text-espresso-700 dark:hover:text-foam-50">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-espresso-700 dark:hover:text-foam-50">
+              Terms
+            </Link>
+            <span className="text-espresso-700 dark:text-foam-50">Study smarter.</span>
+          </nav>
         </div>
       </footer>
     </div>
