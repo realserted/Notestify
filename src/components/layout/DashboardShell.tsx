@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Sidebar } from './Sidebar';
+import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 
 export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
@@ -11,10 +12,7 @@ export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-[100dvh] flex-col bg-paper-100 dark:bg-night-900 md:flex-row">
       <header className="flex h-14 items-center justify-between border-b-2 border-espresso-700 bg-paper-50 px-4 dark:border-night-600 dark:bg-night-800 md:hidden">
-        <div className="flex items-center gap-2.5">
-          <span className="h-3.5 w-3.5 rounded-[5px] border-2 border-espresso-700 bg-citrus-500 dark:border-espresso-900" />
-          <h1 className="font-display text-lg font-bold tracking-tight">Notestify</h1>
-        </div>
+        <NotestifyLogo size={26} />
         <button
           type="button"
           onClick={() => setOpen(true)}

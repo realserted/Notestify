@@ -16,6 +16,7 @@ import { createClient } from '@/lib/supabase/client';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { BackgroundPicker } from '@/components/theme/BackgroundPicker';
 import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 import { cn } from '@/utils/cn';
 
 // Each item keeps a dot colour so the nav reads as a set of tags, not a list of links.
@@ -50,12 +51,7 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
   return (
     <aside className="flex h-[100dvh] w-64 flex-col border-r-2 border-espresso-700 bg-paper-50 dark:border-night-600 dark:bg-night-800 md:h-auto md:w-61">
       <div className="flex items-center justify-between p-5">
-        <div className="flex items-center gap-2.5">
-          <span className="h-3.5 w-3.5 rounded-[5px] border-2 border-espresso-700 bg-citrus-500 dark:border-espresso-900" />
-          <h1 className="font-display text-xl font-bold tracking-tight text-espresso-700 dark:text-foam-50">
-            Notestify
-          </h1>
-        </div>
+        <NotestifyLogo size={30} />
         {onNavigate && (
           <button
             type="button"

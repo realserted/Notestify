@@ -1,10 +1,13 @@
+import { NotestifyMark } from '@/components/brand/NotestifyLogo';
+
 /** Split-screen frame shared by /login and /register. */
 export const AuthSplit = ({ children }: { children: React.ReactNode }) => (
   <div className="grid min-h-screen lg:grid-cols-[0.46fr_0.54fr]">
     <div className="hidden flex-col justify-between border-r-2 border-espresso-700 bg-espresso-500 p-10 dark:border-night-600 dark:bg-night-800 lg:flex">
+      {/* Always the light-on-dark tone: this panel is espresso in both themes. */}
       <div className="flex items-center gap-2.5">
-        <span className="h-3.5 w-3.5 rounded-[5px] border-2 border-espresso-900 bg-citrus-500" />
-        <span className="font-display text-[22px] font-bold tracking-[-0.03em] text-paper-50">
+        <NotestifyMark size={30} tone="light" />
+        <span className="font-display text-[22px] font-bold tracking-[-0.02em] text-paper-50">
           Notestify
         </span>
       </div>

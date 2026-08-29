@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 
 // Copy is unchanged from the previous landing page; only the strip colour is new.
 const features = [
@@ -44,9 +45,8 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-paper-100 text-espresso-700 dark:bg-night-900 dark:text-foam-50">
       <header className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-5 sm:px-11">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="h-[15px] w-[15px] rounded-[5px] border-2 border-espresso-700 bg-citrus-500 dark:border-espresso-900" />
-          <span className="font-display text-[23px] font-bold tracking-[-0.03em]">Notestify</span>
+        <Link href="/" aria-label="Notestify home">
+          <NotestifyLogo size={34} />
         </Link>
         <nav className="flex items-center gap-5">
           <Link
