@@ -42,7 +42,10 @@ Summarize the following content for a student. Include:
 2. 5-7 key takeaways as bullet points.
 3. Important terms with brief definitions.
 
-Use clear Markdown formatting.
+Formatting: the client renders a small subset of Markdown. Use only **bold**,
+*italic*, "### " headings, and simple "- " or "1. " lists at a single level.
+Do not use tables, block quotes, nested lists, or fenced code blocks - they
+render as literal characters.
 
 Content:
 """

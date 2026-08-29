@@ -7,6 +7,7 @@ import type { Document } from '@/types/database';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { Markdown } from '@/components/ui/Markdown';
 
 interface Props {
   initialDocuments: Document[];
@@ -148,9 +149,10 @@ export const UploadManager = ({ initialDocuments }: Props) => {
                       <summary className="cursor-pointer text-sm font-semibold text-citrus-600 dark:text-citrus-500">
                         View summary
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-sans text-sm text-bark-700 dark:text-foam-50/80">
-                        {doc.summary}
-                      </pre>
+                      <Markdown
+                        content={doc.summary}
+                        className="mt-2 text-sm text-bark-700 dark:text-foam-50/80"
+                      />
                     </details>
                   )}
                 </div>
