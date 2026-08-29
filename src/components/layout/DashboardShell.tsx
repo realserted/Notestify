@@ -5,7 +5,13 @@ import { Menu } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 
-export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
+export const DashboardShell = ({
+  children,
+  streak = 0,
+}: {
+  children: React.ReactNode;
+  streak?: number;
+}) => {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -39,7 +45,7 @@ export const DashboardShell = ({ children }: { children: React.ReactNode }) => {
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <Sidebar onNavigate={close} />
+        <Sidebar onNavigate={close} streak={streak} />
       </div>
 
       <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>

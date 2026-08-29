@@ -57,6 +57,21 @@ const computeStreak = (reviewDates: string[]): number => {
 };
 
 export const dashboardService = {
+  /**
+   * Just the streak, for the sidebar. getStats runs five queries; the layout
+   * renders on every dashboard page and only needs this one.
+   */
+  getStreak: async (supabase: SupabaseClient, userId: string): Promise<number> => {
+    const { data } = await supabase
+      .from('review_logs')
+      .select('reviewed_at')
+      .eq('user_id', userId)
+      .order('reviewed_at', { ascending: false })
+      .limit(365);
+
+    return computeStreak((data ?? []).map((l: { reviewed_at: string }) => l.reviewed_at));
+  },
+
   getStats: async (supabase: SupabaseClient, userId: string): Promise<DashboardStats> => {
     const now = new Date();
     const nowIso = now.toISOString();

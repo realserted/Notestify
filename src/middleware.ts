@@ -12,6 +12,7 @@ export const config = {
     '/documents/:path*',
     '/notes/:path*',
     '/quizzes/:path*',
+    '/settings/:path*',
     '/uploads/:path*',
     '/tutor/:path*',
     '/login/:path*',

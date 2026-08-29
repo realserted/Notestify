@@ -10,6 +10,7 @@ import {
   NotebookPen,
   Upload,
   LogOut,
+  Settings,
   X,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
@@ -95,6 +96,19 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
       </nav>
 
       <div className="mt-3 space-y-1 border-t-2 border-paper-200 px-3 pt-3 dark:border-night-700">
+        <Link
+          href="/settings"
+          onClick={onNavigate}
+          className={cn(
+            'flex items-center gap-3 rounded-pop px-3.5 py-2.5 text-sm font-semibold transition-colors',
+            pathname.startsWith('/settings')
+              ? 'bg-paper-200 text-espresso-700 dark:bg-night-700 dark:text-foam-50'
+              : 'text-bark-700 hover:bg-paper-200 dark:text-foam-50 dark:hover:bg-night-700'
+          )}
+        >
+          <Settings size={18} />
+          Settings
+        </Link>
         <TutorialButton className="w-full justify-start" />
         <div data-tour="theme">
           <ThemeToggle className="w-full justify-start" />
@@ -118,6 +132,18 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
           </div>
         </div>
       )}
+
+      <nav className="mt-3 flex flex-wrap gap-x-3 gap-y-1 px-6 text-[11px] font-semibold text-bark-500 dark:text-bark-300">
+        <Link href="/about" onClick={onNavigate} className="hover:underline">
+          About
+        </Link>
+        <Link href="/privacy" onClick={onNavigate} className="hover:underline">
+          Privacy
+        </Link>
+        <Link href="/terms" onClick={onNavigate} className="hover:underline">
+          Terms
+        </Link>
+      </nav>
 
       <button
         onClick={handleLogout}
