@@ -72,6 +72,17 @@ export const dashboardService = {
     return computeStreak((data ?? []).map((l: { reviewed_at: string }) => l.reviewed_at));
   },
 
+  /** Cards due right now. A head count — no rows come back. */
+  getDueCount: async (supabase: SupabaseClient, userId: string): Promise<number> => {
+    const { count } = await supabase
+      .from('flashcards')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .lte('due_date', new Date().toISOString());
+
+    return count ?? 0;
+  },
+
   getStats: async (supabase: SupabaseClient, userId: string): Promise<DashboardStats> => {
     const now = new Date();
     const nowIso = now.toISOString();

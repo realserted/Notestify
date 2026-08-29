@@ -34,9 +34,11 @@ interface SidebarProps {
   onNavigate?: () => void;
   /** Optional: current streak, rendered in the block above Sign out. */
   streak?: number;
+  /** Cards due now — badged on Decks so there is a visible reason to return. */
+  dueCount?: number;
 }
 
-export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
+export const Sidebar = ({ onNavigate, streak = 0, dueCount = 0 }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -90,6 +92,18 @@ export const Sidebar = ({ onNavigate, streak = 0 }: SidebarProps) => {
               />
               <Icon size={17} className="shrink-0" />
               {label}
+              {href === '/decks' && dueCount > 0 && (
+                <span
+                  className={cn(
+                    'ml-auto rounded-full border-2 px-2 py-0.5 text-[11px] font-bold tabular-nums',
+                    active
+                      ? 'border-espresso-900 bg-paper-50 text-espresso-700'
+                      : 'border-espresso-700 bg-citrus-500 text-espresso-700 dark:border-espresso-900'
+                  )}
+                >
+                  {dueCount > 99 ? '99+' : dueCount}
+                </span>
+              )}
             </Link>
           );
         })}

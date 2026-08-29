@@ -9,8 +9,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
   } = await supabase.auth.getUser();
 
   // Middleware already gates these routes; if there is somehow no user, render
-  // the shell without a streak rather than throwing.
-  const streak = user ? await dashboardService.getStreak(supabase, user.id) : 0;
+  // the shell empty rather than throwing.
+  const [streak, dueCount] = user
+    ? await Promise.all([
+        dashboardService.getStreak(supabase, user.id),
+        dashboardService.getDueCount(supabase, user.id),
+      ])
+    : [0, 0];
 
-  return <DashboardShell streak={streak}>{children}</DashboardShell>;
+  return (
+    <DashboardShell streak={streak} dueCount={dueCount}>
+      {children}
+    </DashboardShell>
+  );
 }

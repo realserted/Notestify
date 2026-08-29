@@ -8,9 +8,11 @@ import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 export const DashboardShell = ({
   children,
   streak = 0,
+  dueCount = 0,
 }: {
   children: React.ReactNode;
   streak?: number;
+  dueCount?: number;
 }) => {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
@@ -45,7 +47,7 @@ export const DashboardShell = ({
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <Sidebar onNavigate={close} streak={streak} />
+        <Sidebar onNavigate={close} streak={streak} dueCount={dueCount} />
       </div>
 
       <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
