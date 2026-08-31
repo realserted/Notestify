@@ -11,6 +11,8 @@ export const LIMITS = {
   tutor: { limit: 30, windowSeconds: 3600 },
   /** Flashcard/quiz/summary generation. Each is a large, slow call. */
   generate: { limit: 10, windowSeconds: 3600 },
+  /** Feedback submissions. Generous for a real person, useless for a script. */
+  feedback: { limit: 10, windowSeconds: 3600 },
 } as const;
 
 export type LimitedAction = keyof typeof LIMITS;
@@ -70,7 +72,9 @@ export const rateLimitResponse = (action: LimitedAction, result: RateLimitResult
       error:
         action === 'tutor'
           ? "You've hit the hourly message limit. Try again shortly."
-          : "You've hit the hourly generation limit. Try again shortly.",
+          : action === 'feedback'
+            ? "You've sent a lot of feedback just now. Try again shortly."
+            : "You've hit the hourly generation limit. Try again shortly.",
     },
     {
       status: 429,

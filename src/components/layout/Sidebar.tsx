@@ -18,6 +18,7 @@ import { createClient } from '@/lib/supabase/client';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { BackgroundPicker } from '@/components/theme/BackgroundPicker';
 import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { FeedbackDialog } from '@/components/feedback/FeedbackDialog';
 import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 import { cn } from '@/utils/cn';
 
@@ -126,6 +127,7 @@ export const Sidebar = ({ onNavigate, streak = 0, dueCount = 0 }: SidebarProps) 
           Settings
         </Link>
         <TutorialButton className="w-full justify-start" />
+        <FeedbackDialog className="w-full justify-start" />
         <div data-tour="theme">
           <ThemeToggle className="w-full justify-start" />
         </div>
