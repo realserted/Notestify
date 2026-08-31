@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardTitle } from '@/components/ui/Card';
 import { AccountActions } from '@/components/settings/AccountActions';
+import { ReminderToggle } from '@/components/settings/ReminderToggle';
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -10,6 +11,12 @@ export default async function SettingsPage() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect('/login');
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('daily_reminders')
+    .eq('id', user.id)
+    .single();
 
   const fullName = (user.user_metadata?.full_name as string | undefined) ?? null;
   const provider = user.app_metadata?.provider === 'google' ? 'Google' : 'Email and password';
@@ -43,6 +50,8 @@ export default async function SettingsPage() {
           </div>
         </dl>
       </Card>
+
+      <ReminderToggle initialEnabled={profile?.daily_reminders ?? false} />
 
       <AccountActions email={user.email ?? ''} />
 

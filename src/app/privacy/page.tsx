@@ -103,10 +103,25 @@ export default function PrivacyPage() {
               <strong className="font-bold text-espresso-700 dark:text-foam-50">Vercel</strong> —
               hosting. Handles requests and keeps standard server logs.
             </>,
+            <>
+              <strong className="font-bold text-espresso-700 dark:text-foam-50">Resend</strong> —
+              delivers reminder emails, and only if you switch them on. Receives your email
+              address and the number of cards you have due, never your study content.
+            </>,
           ]}
         />
         <p className="text-bark-500 dark:text-bark-300">
           Each of these processes data under its own terms, and may store it outside your country.
+        </p>
+      </Section>
+
+      <Section heading="Email">
+        <p>
+          We send email for two reasons. Sign-in and account messages are sent by Supabase and are
+          part of running the service. Daily study reminders are optional, off by default, and only
+          go out on days you actually have cards due — never as marketing. Every reminder carries a
+          one-click link that turns them off without signing in, and you can change the setting at
+          any time under Settings.
         </p>
       </Section>
 
