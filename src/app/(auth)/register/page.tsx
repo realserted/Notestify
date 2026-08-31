@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const supabase = createClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,8 +24,13 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+
+    if (password !== confirmPassword) {
+      return setError('Those passwords do not match.');
+    }
+
+    setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -67,12 +73,29 @@ export default function RegisterPage() {
             required
           />
           <Input
+            id="password"
             label="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={6}
+            autoComplete="new-password"
+          />
+          <Input
+            id="confirm-password"
+            label="Confirm password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            minLength={6}
+            autoComplete="new-password"
+            error={
+              confirmPassword && password !== confirmPassword
+                ? 'Passwords do not match'
+                : undefined
+            }
           />
         {error && (
           <p className="text-sm font-semibold text-clay-500 dark:text-clay-300">{error}</p>
@@ -86,7 +109,11 @@ export default function RegisterPage() {
           type="submit"
           className="w-full"
           loading={loading}
-          disabled={turnstileEnabled && !captchaToken}
+          disabled={
+            (turnstileEnabled && !captchaToken) ||
+            !password ||
+            password !== confirmPassword
+          }
         >
           Create account
         </Button>
