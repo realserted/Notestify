@@ -1,6 +1,7 @@
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { createClient } from '@/lib/supabase/server';
 import { dashboardService } from '@/services/dashboard.service';
+import { isAdmin } from '@/lib/auth/admin';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -18,7 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     : [0, 0];
 
   return (
-    <DashboardShell streak={streak} dueCount={dueCount}>
+    <DashboardShell streak={streak} dueCount={dueCount} admin={isAdmin(user)}>
       {children}
     </DashboardShell>
   );

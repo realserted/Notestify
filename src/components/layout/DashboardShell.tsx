@@ -9,10 +9,12 @@ export const DashboardShell = ({
   children,
   streak = 0,
   dueCount = 0,
+  admin = false,
 }: {
   children: React.ReactNode;
   streak?: number;
   dueCount?: number;
+  admin?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
@@ -47,7 +49,7 @@ export const DashboardShell = ({
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <Sidebar onNavigate={close} streak={streak} dueCount={dueCount} />
+        <Sidebar onNavigate={close} streak={streak} dueCount={dueCount} admin={admin} />
       </div>
 
       <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>

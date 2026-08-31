@@ -12,6 +12,7 @@ import {
   LogOut,
   Search,
   Settings,
+  ShieldCheck,
   X,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
@@ -39,9 +40,16 @@ interface SidebarProps {
   streak?: number;
   /** Cards due now — badged on Decks so there is a visible reason to return. */
   dueCount?: number;
+  /** Shows the admin entry. The route and RLS enforce this independently. */
+  admin?: boolean;
 }
 
-export const Sidebar = ({ onNavigate, streak = 0, dueCount = 0 }: SidebarProps) => {
+export const Sidebar = ({
+  onNavigate,
+  streak = 0,
+  dueCount = 0,
+  admin = false,
+}: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -113,6 +121,21 @@ export const Sidebar = ({ onNavigate, streak = 0, dueCount = 0 }: SidebarProps) 
       </nav>
 
       <div className="mt-3 space-y-1 border-t-2 border-paper-200 px-3 pt-3 dark:border-night-700">
+        {admin && (
+          <Link
+            href="/admin"
+            onClick={onNavigate}
+            className={cn(
+              'flex items-center gap-3 rounded-pop px-3.5 py-2.5 text-sm font-semibold transition-colors',
+              pathname.startsWith('/admin')
+                ? 'bg-paper-200 text-espresso-700 dark:bg-night-700 dark:text-foam-50'
+                : 'text-bark-700 hover:bg-paper-200 dark:text-foam-50 dark:hover:bg-night-700'
+            )}
+          >
+            <ShieldCheck size={18} />
+            Feedback inbox
+          </Link>
+        )}
         <Link
           href="/settings"
           onClick={onNavigate}

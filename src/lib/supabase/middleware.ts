@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
 const PROTECTED_PREFIXES = [
+  '/admin',
   '/dashboard',
   '/decks',
   '/documents',

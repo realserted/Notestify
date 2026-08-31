@@ -7,6 +7,7 @@ export const middleware = (request: NextRequest) => updateSession(request);
 // the landing page, /api/*, static assets — skips middleware entirely.
 export const config = {
   matcher: [
+    '/admin/:path*',
     '/dashboard/:path*',
     '/decks/:path*',
     '/documents/:path*',
