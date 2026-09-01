@@ -1,8 +1,38 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+
+// The landing page is the only one a search result would send someone to, so
+// it carries its own title rather than inheriting the root default.
+export const metadata: Metadata = {
+  title: {
+    absolute: 'Notestify — Turn your PDFs and notes into flashcards, quizzes and an AI tutor',
+  },
+  alternates: { canonical: '/' },
+};
+
+/** Tells search engines what this actually is, rather than leaving them to guess. */
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Notestify',
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Web',
+  description:
+    'Turn PDFs, slides and notes into flashcards, quizzes and an AI tutor that answers from your own material, with SM-2 spaced repetition.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@type': 'Person', name: 'Lester Lawrence Sanchez' },
+  featureList: [
+    'AI flashcard generation from PDF, DOCX and PPTX',
+    'AI quiz generation',
+    'SM-2 spaced repetition',
+    'AI tutor grounded in your own study material',
+    'PDF annotation',
+  ],
+};
 
 // Copy is unchanged from the previous landing page; only the strip colour is new.
 const features = [
@@ -45,6 +75,10 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-paper-100 text-espresso-700 dark:bg-night-900 dark:text-foam-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <header className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-5 sm:px-11">
         <Link href="/" aria-label="Notestify home">
           <NotestifyLogo size={34} />

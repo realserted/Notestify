@@ -18,9 +18,46 @@ const sans = Plus_Jakarta_Sans({
   weight: ['400', '500', '600', '700'],
 });
 
+/** Canonical origin. Without metadataBase, Open Graph image paths stay
+ *  relative and social platforms silently render no preview. */
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.notestify.com';
+
 export const metadata: Metadata = {
-  title: 'Notestify — AI-powered study companion',
-  description: 'Flashcards, quizzes, and AI-generated study materials.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Notestify — Turn your notes into flashcards, quizzes and an AI tutor',
+    // Page titles become "Settings · Notestify" rather than repeating the tagline.
+    template: '%s · Notestify',
+  },
+  description:
+    'Upload a PDF, DOCX or PPTX and Notestify turns it into flashcards, quizzes and an AI tutor that answers from your own material. Free, with SM-2 spaced repetition.',
+  applicationName: 'Notestify',
+  keywords: [
+    'flashcards',
+    'spaced repetition',
+    'SM-2',
+    'AI tutor',
+    'quiz generator',
+    'study app',
+    'PDF to flashcards',
+  ],
+  authors: [{ name: 'Lester Lawrence Sanchez' }],
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: 'Notestify',
+    url: '/',
+    title: 'Notestify — Turn your notes into flashcards, quizzes and an AI tutor',
+    description:
+      'Upload a PDF, DOCX or PPTX and get flashcards, quizzes and a tutor that answers from your own material.',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Notestify — Turn your notes into flashcards, quizzes and an AI tutor',
+    description:
+      'Upload a PDF, DOCX or PPTX and get flashcards, quizzes and a tutor that answers from your own material.',
+  },
 };
 
 export const viewport: Viewport = {
