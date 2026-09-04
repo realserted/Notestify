@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardTitle } from '@/components/ui/Card';
 import { cn } from '@/utils/cn';
 
 export const ReminderToggle = ({ initialEnabled }: { initialEnabled: boolean }) => {
+  const router = useRouter();
   const [enabled, setEnabled] = useState(initialEnabled);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -26,7 +28,13 @@ export const ReminderToggle = ({ initialEnabled }: { initialEnabled: boolean }) 
     if (!res.ok) {
       setEnabled(!next);
       setError('Could not save that. Please try again.');
+      return;
     }
+
+    // This page is a server component that read daily_reminders at render
+    // time. Without invalidating the router cache, navigating away and back
+    // replays the stale payload and the switch appears to have reset itself.
+    router.refresh();
   };
 
   return (

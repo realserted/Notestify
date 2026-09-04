@@ -17,15 +17,29 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   }
 
-  const { error } = await supabase
+  // Upsert rather than update. A profile row can be missing if the
+  // handle_new_user trigger failed when the account was created, and an
+  // UPDATE matching zero rows is reported by Supabase as a success — so the
+  // preference silently never saved. Upserting makes the route self-healing.
+  //
+  // .select() so a write that somehow still matches nothing is a real error.
+  const { data, error } = await supabase
     .from('profiles')
-    .update({ daily_reminders: parsed.data.enabled })
-    .eq('id', user.id);
+    .upsert(
+      {
+        id: user.id,
+        email: user.email ?? '',
+        daily_reminders: parsed.data.enabled,
+      },
+      { onConflict: 'id' }
+    )
+    .select('daily_reminders')
+    .single();
 
-  if (error) {
+  if (error || !data) {
     console.error('[account/reminders]', error);
     return NextResponse.json({ error: 'Could not save that.' }, { status: 500 });
   }
 
-  return NextResponse.json({ enabled: parsed.data.enabled });
+  return NextResponse.json({ enabled: data.daily_reminders });
 }
