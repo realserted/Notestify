@@ -73,10 +73,17 @@ interface Props {
    * captcha rather than by the real credentials.
    */
   resetKey?: number;
+  /**
+   * Forces a widget theme instead of following the app theme. The mobile
+   * captcha page needs this: it renders inside a React Native WebView with no
+   * persisted theme preference of its own, so it must be told explicitly.
+   */
+  themeOverride?: 'light' | 'dark';
 }
 
-export const Turnstile = ({ onVerify, onExpire, resetKey = 0 }: Props) => {
-  const { theme } = useTheme();
+export const Turnstile = ({ onVerify, onExpire, resetKey = 0, themeOverride }: Props) => {
+  const { theme: appTheme } = useTheme();
+  const theme = themeOverride ?? appTheme;
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   // Kept in refs so re-renders never re-create the widget.
