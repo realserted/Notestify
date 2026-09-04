@@ -11,7 +11,9 @@
     "copy-pdf-worker": "node scripts/copy-pdf-worker.mjs",
     "postinstall": "npm run copy-pdf-worker",
     "prebuild": "npm run copy-pdf-worker",
-    "predev": "npm run copy-pdf-worker"
+    "predev": "npm run copy-pdf-worker",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
@@ -35,6 +37,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^22.9.0",
     "@types/pdf-parse": "^1.1.4",
     "@types/react": "^19.0.0",
