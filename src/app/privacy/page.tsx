@@ -79,6 +79,12 @@ export default function PrivacyPage() {
             on it.
           </p>
         </Notice>
+        <p>
+          Feedback you send through the in-app form takes a different path from your study content.
+          It goes to a private Discord channel we monitor, and its text is sent to Gemini so it can
+          be summarised and prioritised. Please do not put passwords or anything you consider
+          sensitive in a bug report.
+        </p>
         <p>We rely on these providers to run the service:</p>
         <Bullets
           items={[
@@ -107,6 +113,11 @@ export default function PrivacyPage() {
               <strong className="font-bold text-espresso-700 dark:text-foam-50">Resend</strong> —
               delivers reminder emails, and only if you switch them on. Receives your email
               address and the number of cards you have due, never your study content.
+            </>,
+            <>
+              <strong className="font-bold text-espresso-700 dark:text-foam-50">Discord</strong> —
+              receives bug reports and feedback you submit, so we see them promptly. Only what you
+              wrote in the feedback form, never your notes, decks, or documents.
             </>,
           ]}
         />
