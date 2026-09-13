@@ -70,3 +70,38 @@ test.describe('API auth', () => {
     expect([404, 503]).toContain(res.status());
   });
 });
+
+test.describe('Google Drive', () => {
+  test('import rejects anonymous callers', async ({ request }) => {
+    const res = await request.post('/api/drive/import', {
+      data: { fileId: 'abc', name: 'x.pdf', mimeType: 'application/pdf' },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test('picker token is not mintable anonymously', async ({ request }) => {
+    // This endpoint hands out a Google access token. A 200 here would mean
+    // anyone can mint one.
+    const res = await request.post('/api/drive/connection');
+    expect(res.status()).toBe(401);
+  });
+
+  test('connection status and disconnect require a session', async ({ request }) => {
+    expect((await request.get('/api/drive/connection')).status()).toBe(401);
+    expect((await request.delete('/api/drive/connection')).status()).toBe(401);
+  });
+
+  test('consent flow cannot be started anonymously', async ({ request }) => {
+    // Must not redirect to Google either: starting consent with no session
+    // would leave nowhere to attach the resulting token.
+    const res = await request.get('/api/drive/connect', { maxRedirects: 0 });
+    expect(res.status()).toBe(401);
+  });
+
+  test('picker token endpoint rejects GET', async ({ request }) => {
+    // Minting a credential on GET would make it reachable by a cross-site
+    // prefetch or image tag. GET is the status endpoint, POST mints.
+    const res = await request.get('/api/drive/connection');
+    expect(res.status()).not.toBe(200);
+  });
+});

@@ -14,7 +14,11 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     .select('storage_path, user_id, title')
     .eq('id', id)
     .single();
-  if (error || !doc || doc.user_id !== user.id) {
+  // storage_path is null for Drive imports — we kept the extracted text and
+  // discarded the original, so there is nothing to sign. 404 rather than a
+  // dedicated status, matching the answer for a document you do not own, so
+  // this reveals nothing about which documents exist.
+  if (error || !doc || doc.user_id !== user.id || !doc.storage_path) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 

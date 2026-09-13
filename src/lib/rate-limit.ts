@@ -13,6 +13,11 @@ export const LIMITS = {
   generate: { limit: 10, windowSeconds: 3600 },
   /** Feedback submissions. Generous for a real person, useless for a script. */
   feedback: { limit: 10, windowSeconds: 3600 },
+  /**
+   * Drive imports. Each spends Google API quota, which is a shared project
+   * resource — one user looping an import would rate-limit everybody.
+   */
+  drive: { limit: 20, windowSeconds: 3600 },
 } as const;
 
 export type LimitedAction = keyof typeof LIMITS;
@@ -67,15 +72,17 @@ export const checkRateLimit = async (
 export const rateLimitResponse = (action: LimitedAction, result: RateLimitResult) => {
   const retryAfter = Math.max(1, Math.ceil((result.resetAt.getTime() - Date.now()) / 1000));
 
+  // A map rather than a ternary chain: adding an action to LIMITS without a
+  // message here is then a type error rather than a silently wrong string.
+  const MESSAGES: Record<LimitedAction, string> = {
+    tutor: "You've hit the hourly message limit. Try again shortly.",
+    feedback: "You've sent a lot of feedback just now. Try again shortly.",
+    generate: "You've hit the hourly generation limit. Try again shortly.",
+    drive: "You've imported a lot from Drive just now. Try again shortly.",
+  };
+
   return NextResponse.json(
-    {
-      error:
-        action === 'tutor'
-          ? "You've hit the hourly message limit. Try again shortly."
-          : action === 'feedback'
-            ? "You've sent a lot of feedback just now. Try again shortly."
-            : "You've hit the hourly generation limit. Try again shortly.",
-    },
+    { error: MESSAGES[action] },
     {
       status: 429,
       headers: {

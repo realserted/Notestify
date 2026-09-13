@@ -70,16 +70,26 @@ export interface QuizAttempt {
   completed_at: string;
 }
 
+export type DocumentSource = 'upload' | 'drive';
+
 export interface Document {
   id: string;
   user_id: string;
   title: string;
-  storage_path: string;
+  /**
+   * Null for Drive imports. We fetch the bytes, extract the text and discard
+   * the original, so there is no stored file to sign a URL for. Treat this as
+   * the answer to "do we still have the original?", not as an optional field.
+   */
+  storage_path: string | null;
   file_size: number | null;
+  /** The original Drive MIME for imports, so a Google Doc never reads as a PDF. */
   mime_type: string | null;
   extracted_text: string | null;
   summary: string | null;
   status: DocumentStatus;
+  source: DocumentSource;
+  drive_file_id: string | null;
   created_at: string;
   updated_at: string;
 }

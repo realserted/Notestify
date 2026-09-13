@@ -8,9 +8,13 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Markdown } from '@/components/ui/Markdown';
+import { MAX_UPLOAD_BYTES, formatBytes } from '@/lib/limits';
+import { DrivePickerButton } from '@/components/drive/DrivePickerButton';
 
 interface Props {
   initialDocuments: Document[];
+  /** Drive is connected in Settings. Hides the picker entirely when false. */
+  driveConnected: boolean;
 }
 
 type ProcessingAction = 'extract' | 'summarize';
@@ -21,7 +25,7 @@ const STATUS_CHIPS: Record<string, string> = {
   failed: 'bg-clay-500 text-espresso-700',
 };
 
-export const UploadManager = ({ initialDocuments }: Props) => {
+export const UploadManager = ({ initialDocuments, driveConnected }: Props) => {
   const supabase = createClient();
   const [documents, setDocuments] = useState(initialDocuments);
 
@@ -110,20 +114,27 @@ export const UploadManager = ({ initialDocuments }: Props) => {
           Drop a PDF, DOCX, or PPTX
         </p>
         <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-bark-500 dark:text-bark-300">
-          Max 25 MB · extract the text once it&apos;s uploaded
+          Max {formatBytes(MAX_UPLOAD_BYTES)} · extract the text once it&apos;s uploaded
         </p>
-        <label className="mt-[18px] inline-block cursor-pointer">
-          <input
-            type="file"
-            accept=".pdf,.docx,.pptx"
-            className="sr-only"
-            onChange={handleUpload}
-            disabled={uploading}
+        <div className="mt-[18px] flex flex-wrap items-center justify-center gap-3">
+          <label className="inline-block cursor-pointer">
+            <input
+              type="file"
+              accept=".pdf,.docx,.pptx"
+              className="sr-only"
+              onChange={handleUpload}
+              disabled={uploading}
+            />
+            <span className="inline-flex h-11 items-center rounded-full border-2 border-espresso-700 bg-paper-50 px-5 text-sm font-bold text-espresso-700 transition-colors hover:bg-paper-200 dark:border-night-600 dark:bg-night-800 dark:text-foam-50 dark:hover:bg-night-700">
+              {uploading ? 'Uploading…' : 'Choose a file'}
+            </span>
+          </label>
+
+          <DrivePickerButton
+            connected={driveConnected}
+            onImported={(doc) => setDocuments((prev) => [doc, ...prev])}
           />
-          <span className="inline-flex h-11 items-center rounded-full border-2 border-espresso-700 bg-paper-50 px-5 text-sm font-bold text-espresso-700 transition-colors hover:bg-paper-200 dark:border-night-600 dark:bg-night-800 dark:text-foam-50 dark:hover:bg-night-700">
-            {uploading ? 'Uploading…' : 'Choose a file'}
-          </span>
-        </label>
+        </div>
       </div>
 
       {uploading && <ProgressBar progress={null} label="Uploading…" />}
@@ -159,7 +170,12 @@ export const UploadManager = ({ initialDocuments }: Props) => {
                   )}
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-2">
-                  {(doc.mime_type ?? '').includes('pdf') && (
+                  {/*
+                    storage_path, not mime_type, is the real question here:
+                    "do we still have the original to render?". A Drive-imported
+                    PDF has mime_type application/pdf but no stored file.
+                  */}
+                  {doc.storage_path && (doc.mime_type ?? '').includes('pdf') && (
                     <Link href={`/documents/${doc.id}`}>
                       <Button size="sm" variant="outline">
                         Annotate

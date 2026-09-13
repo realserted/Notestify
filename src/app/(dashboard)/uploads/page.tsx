@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { UploadManager } from '@/components/uploads/UploadManager';
+import { getConnection } from '@/lib/drive/connection';
 import type { Document } from '@/types/database';
 
 export default async function UploadsPage() {
@@ -16,5 +17,12 @@ export default async function UploadsPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false });
 
-  return <UploadManager initialDocuments={(documents ?? []) as Document[]} />;
+  const driveConnection = await getConnection(supabase);
+
+  return (
+    <UploadManager
+      initialDocuments={(documents ?? []) as Document[]}
+      driveConnected={driveConnection !== null}
+    />
+  );
 }

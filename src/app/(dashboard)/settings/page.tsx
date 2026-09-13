@@ -4,13 +4,24 @@ import { createClient } from '@/lib/supabase/server';
 import { Card, CardTitle } from '@/components/ui/Card';
 import { AccountActions } from '@/components/settings/AccountActions';
 import { ReminderToggle } from '@/components/settings/ReminderToggle';
+import { DriveConnectionCard } from '@/components/drive/DriveConnectionCard';
+import { getConnection } from '@/lib/drive/connection';
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ drive?: string }>;
+}) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect('/login');
+
+  // Read server-side rather than via useSearchParams, which would force this
+  // page into a Suspense boundary for one query string value.
+  const { drive: driveNotice } = await searchParams;
+  const driveConnection = await getConnection(supabase);
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -52,6 +63,8 @@ export default async function SettingsPage() {
       </Card>
 
       <ReminderToggle initialEnabled={profile?.daily_reminders ?? false} />
+
+      <DriveConnectionCard connection={driveConnection} notice={driveNotice} />
 
       <AccountActions email={user.email ?? ''} />
 

@@ -31,6 +31,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
     }
 
+    // Drive imports are extracted at import time and keep no stored file, so
+    // there is nothing to re-extract from. Without this the download below
+    // fails deep inside the storage client on a null path.
+    if (!doc.storage_path) {
+      return NextResponse.json(
+        { error: 'This document was imported from Drive and is already extracted.' },
+        { status: 409 }
+      );
+    }
+
     await supabase.from('documents').update({ status: 'processing' }).eq('id', doc.id);
 
     const { data: fileBlob, error: dlError } = await supabase.storage
