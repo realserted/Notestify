@@ -57,8 +57,8 @@ export const DriveConnectionCard = ({ connection, notice }: Props) => {
 
           {connection?.scopeStale && (
             <p className="mt-2 text-sm font-semibold text-clay-500 dark:text-clay-300">
-              This connection was granted different permissions than Notestify now uses.
-              Reconnect to refresh it.
+              This connection is missing permission to read the files you pick. Reconnect to
+              grant it.
             </p>
           )}
 

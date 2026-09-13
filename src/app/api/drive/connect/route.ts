@@ -54,7 +54,11 @@ export async function GET(request: Request) {
     // to renew it.
     access_type: 'offline',
     prompt: 'consent',
-    include_granted_scopes: 'true',
+    // Deliberately NOT include_granted_scopes. It merges in every scope this
+    // Google account already granted anywhere in the project — which here
+    // means openid, email and profile from the Supabase sign-in client, since
+    // both share one consent screen. The resulting token would reach further
+    // than drive.file for no benefit.
     state,
   });
 

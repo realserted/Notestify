@@ -17,9 +17,20 @@ export const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 export interface DriveConnectionSummary {
   googleEmail: string | null;
   connectedAt: string;
-  /** True when the stored grant predates a change to DRIVE_SCOPE. */
+  /** True when the stored grant is missing the scope imports need. */
   scopeStale: boolean;
 }
+
+/**
+ * Does this grant still carry drive.file?
+ *
+ * Membership, not string equality: Google returns the granted scopes as a
+ * space-separated set whose contents and order it controls, and which can
+ * legitimately hold more than we asked for. Comparing the whole string flags a
+ * perfectly good connection as broken.
+ */
+export const grantsDriveFile = (scope: string): boolean =>
+  scope.split(/\s+/).includes(DRIVE_SCOPE);
 
 export const saveConnection = async (
   supabase: SupabaseClient,
@@ -66,7 +77,7 @@ export const getConnection = async (
   return {
     googleEmail: data.google_email,
     connectedAt: data.connected_at,
-    scopeStale: data.scope !== DRIVE_SCOPE,
+    scopeStale: !grantsDriveFile(data.scope ?? ''),
   };
 };
 
