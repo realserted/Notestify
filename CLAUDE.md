@@ -19,11 +19,15 @@ Turnstile · Vercel.
 npm run dev          # next dev --turbo
 npm run build        # next build
 npm run typecheck    # tsc --noEmit
-npx supabase db push # apply migrations (10 in supabase/migrations/)
+npm test             # vitest run  (unit, src/**/*.test.ts)
+npm run test:e2e     # playwright  (e2e/, needs a production build)
+npm run verify       # all four, in the order a commit should pass them
+npx supabase db push # apply migrations from supabase/migrations/
 ```
 
-Always run `typecheck` and `build` before committing. The build catches
-Tailwind and metadata problems that `tsc` does not.
+Run `verify` before committing. The build catches Tailwind and metadata
+problems `tsc` does not, and the e2e suite catches route-gating mistakes that
+neither does.
 
 ---
 
@@ -58,6 +62,22 @@ internally so a caller cannot spend another user's budget. It fails closed.
 **The middleware matcher and `PROTECTED_PREFIXES` must agree.** They live in
 `src/middleware.ts` and `src/lib/supabase/middleware.ts`. A route in one but not
 the other is either ungated or gated inconsistently. Add to both.
+
+**Google Drive uses `drive.file` and nothing else.** Never `drive`,
+`drive.readonly`, or any other Drive scope. `drive.file` is non-sensitive, so
+Google grants access only to files the user hands over through the Picker, and
+the project stays out of restricted-scope verification and CASA entirely. The
+consent screen's Data Access lists are empty on purpose — non-sensitive scopes
+need no registration, and an entry appearing under "sensitive" or "restricted"
+means something widened. `include_granted_scopes` is deliberately absent from
+`/api/drive/connect`: it silently merges in every scope the account granted
+elsewhere in the project.
+
+**`auth` and `forbidden` are different Drive failures and must stay that way.**
+In `src/lib/drive/api.ts`, only `auth` may delete a user's connection. Google
+answers 403 for a file the user never picked, which is `forbidden` — collapsing
+the two would disconnect a victim's Drive because somebody submitted a foreign
+file ID. There is a test for this.
 
 ---
 
@@ -94,6 +114,26 @@ Verify after deploying.
 `dashboard.service.ts` exists because `toISOString().slice(0,10)` mis-dated
 late-night reviews and broke streaks for users away from UTC.
 
+**The Supabase clients carry no `Database` generic, so `.select()` returns
+`any`.** Changing a type in `src/types/database.ts` produces no errors at the
+call sites that read it. `storage_path` was made nullable for Drive imports and
+`tsc` reported nothing — every null guard was written by hand. Assume the
+compiler will not catch a shape change until a generated `Database` type is
+wired into `createServerClient<Database>`.
+
+**A `documents` row may have no file.** `storage_path` is null for Drive
+imports — we keep the extracted text and discard the original. Treat it as the
+answer to "do we still have the original?", not as an optional field; it is
+what gates signing a URL or re-extracting. A check constraint keeps the old
+invariant for uploads.
+
+**Native Google formats cannot be downloaded.** `files.get?alt=media` returns
+403 for `application/vnd.google-apps.*`; Docs and Slides must go through
+`files.export` to DOCX and PPTX. `src/lib/drive/formats.ts` is the single table
+deciding supported-or-not, export-or-download, and which parser. Omitting the
+export branch breaks the most common file a student picks while working
+perfectly for an uploaded PDF in testing.
+
 ---
 
 ## Conventions
@@ -127,6 +167,13 @@ Do not "helpfully" add these:
   but them can read their content.
 - **Public sign-up pages in the sitemap** — `/login` and `/register` are
   excluded on purpose; they are dead ends in a search result.
+- **Google Sheets as an import source** — exports only to XLSX, which no parser
+  here reads, and a spreadsheet makes poor study material. Rejected before any
+  Drive call by its absence from `formats.ts`.
+- **Browsing or listing a user's Drive** — impossible under `drive.file`, and
+  the reason that scope was chosen. Selection happens in Google's Picker.
+- **Storing the file a user imports** — the bytes are fetched, extracted and
+  discarded. `/privacy` says so.
 
 ## Known debt
 
@@ -136,3 +183,7 @@ Do not "helpfully" add these:
 - Account export includes document rows but not the uploaded files
 - `/api/*` routes authenticate by cookie only; the mobile app needs
   `Authorization: Bearer` support added before it can call them
+- Drive's authenticated paths have unit coverage but no end-to-end test: no
+  test drives a real Google Doc through `files.export`
+- A Drive import cannot be re-imported to refresh stale text. `drive_file_id`
+  is recorded so it stays possible, but nothing reads it
