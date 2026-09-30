@@ -12,6 +12,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${SITE_URL}/`, lastModified, changeFrequency: 'weekly', priority: 1 },
     { url: `${SITE_URL}/about`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
+    // Above the legal pages: it answers the questions people actually search,
+    // and it is the page most likely to be lifted into a featured snippet.
+    { url: `${SITE_URL}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE_URL}/privacy`, lastModified, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${SITE_URL}/terms`, lastModified, changeFrequency: 'yearly', priority: 0.3 },
   ];

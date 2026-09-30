@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { NotestifyLogo } from '@/components/brand/NotestifyLogo';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { SITE_URL } from './layout';
 
 // The landing page is the only one a search result would send someone to, so
 // it carries its own title rather than inheriting the root default.
@@ -14,23 +15,63 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
 };
 
-/** Tells search engines what this actually is, rather than leaving them to guess. */
+/**
+ * Three linked entities rather than one, because they answer different
+ * questions.
+ *
+ * SoftwareApplication says what the product does. Organization and WebSite
+ * claim the *name* — which is what a search for "notestify" is actually
+ * asking about. Without them the brand query has nothing here to match, and
+ * the highest-authority page carrying the word wins by default.
+ *
+ * sameAs is the part that matters most: it is how a search engine learns the
+ * GitHub repository and this site are one entity rather than two strangers
+ * competing for the same word.
+ */
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Notestify',
-  applicationCategory: 'EducationalApplication',
-  operatingSystem: 'Web',
-  description:
-    'Turn PDFs, slides and notes into flashcards, quizzes and an AI tutor that answers from your own material, with SM-2 spaced repetition.',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  author: { '@type': 'Person', name: 'Lester Lawrence Sanchez' },
-  featureList: [
-    'AI flashcard generation from PDF, DOCX and PPTX',
-    'AI quiz generation',
-    'SM-2 spaced repetition',
-    'AI tutor grounded in your own study material',
-    'PDF annotation',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      name: 'Notestify',
+      alternateName: 'Notestify AI Study Platform',
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon.svg`,
+      description:
+        'Notestify turns PDFs, slides and notes into flashcards, quizzes and an AI tutor, with SM-2 spaced repetition.',
+      founder: { '@type': 'Person', name: 'Lester Lawrence Sanchez' },
+      sameAs: ['https://github.com/realserted/Notestify'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: 'Notestify',
+      url: SITE_URL,
+      inLanguage: 'en',
+      publisher: { '@id': `${SITE_URL}/#organization` },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': `${SITE_URL}/#app`,
+      name: 'Notestify',
+      url: SITE_URL,
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web',
+      description:
+        'Turn PDFs, slides and notes into flashcards, quizzes and an AI tutor that answers from your own material, with SM-2 spaced repetition.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      author: { '@type': 'Person', name: 'Lester Lawrence Sanchez' },
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      featureList: [
+        'AI flashcard generation from PDF, DOCX and PPTX',
+        'AI quiz generation',
+        'SM-2 spaced repetition',
+        'AI tutor grounded in your own study material',
+        'Import documents from Google Drive',
+        'PDF annotation',
+      ],
+    },
   ],
 };
 
@@ -77,7 +118,9 @@ export default async function HomePage() {
     <div className="min-h-screen bg-paper-100 text-espresso-700 dark:bg-night-900 dark:text-foam-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
+        }}
       />
       <header className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-5 sm:px-11">
         <Link href="/" aria-label="Notestify home">

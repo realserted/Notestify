@@ -85,6 +85,9 @@ export const LegalFooter = () => (
         <Link href="/about" className="hover:text-espresso-700 dark:hover:text-foam-50">
           About
         </Link>
+        <Link href="/faq" className="hover:text-espresso-700 dark:hover:text-foam-50">
+          FAQ
+        </Link>
         <Link href="/privacy" className="hover:text-espresso-700 dark:hover:text-foam-50">
           Privacy
         </Link>

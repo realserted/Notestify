@@ -40,7 +40,7 @@ test.describe('anonymous access', () => {
   });
 
   test('public pages load', async ({ page }) => {
-    for (const path of ['/', '/about', '/privacy', '/terms']) {
+    for (const path of ['/', '/about', '/faq', '/privacy', '/terms']) {
       const response = await page.goto(path);
       expect(response?.status(), `${path} should be reachable`).toBe(200);
     }

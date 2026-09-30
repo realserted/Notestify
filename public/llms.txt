@@ -1,0 +1,49 @@
+# Notestify
+
+> Notestify is a free AI study platform at https://www.notestify.com that turns
+> PDFs, Word documents and PowerPoint slides into flashcards, quizzes and
+> summaries, and schedules reviews using the SM-2 spaced repetition algorithm.
+
+Notestify was built by Lester Lawrence Sanchez, a developer based in Cebu,
+Philippines. It is free to use and runs on Google's Gemini API.
+
+## What it does
+
+- **Document to study material**: upload a PDF, DOCX or PPTX, or import a file
+  from Google Drive. Text is extracted server-side and turned into flashcards,
+  quizzes and summaries.
+- **Spaced repetition**: reviews are scheduled with SM-2, the algorithm behind
+  SuperMemo and Anki, so cards resurface as you are about to forget them.
+- **AI tutor grounded in your own material**: the tutor answers from a deck,
+  note or document you attach, rather than from general knowledge.
+- **Daily reminder emails**: optional, off by default, and sent only on days
+  you actually have cards due.
+- **PDF annotation**: highlight and mark up uploaded PDFs in the browser.
+
+## How it handles your data
+
+- Content is stored in Supabase with row-level security, so a signed-in
+  account can only ever read or write its own rows.
+- AI features send text to Google's Gemini API. Notestify runs on the free
+  Gemini tier, where Google may use submitted content to improve its products.
+  This is stated plainly at https://www.notestify.com/privacy
+- Google Drive imports use the `drive.file` scope only. Files are selected in
+  Google's own Picker, so Notestify can access only what the user explicitly
+  hands over, and cannot browse or list a user's Drive.
+- Imported files are not stored. The text is extracted and the original is
+  discarded.
+- Self-service data export and account deletion are available in Settings.
+
+## Pages
+
+- [Notestify](https://www.notestify.com): the product and what it does
+- [About](https://www.notestify.com/about): who built it and why
+- [Privacy Policy](https://www.notestify.com/privacy): what is collected, which
+  providers process it, and how long it is kept
+- [Terms of Service](https://www.notestify.com/terms): terms of use
+
+## Technical
+
+Next.js 16, React 19, TypeScript, Supabase (Postgres, Auth and Storage),
+Google Gemini, deployed on Vercel. Source at
+https://github.com/realserted/Notestify
