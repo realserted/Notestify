@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { generateSummary } from '@/lib/ai/service';
+import { generationFailureResponse } from '@/lib/ai/errors';
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
 const schema = z.object({
@@ -36,7 +37,6 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({ summary });
   } catch (error) {
-    console.error('[ai/summarize]', error);
-    return NextResponse.json({ error: 'Summarization failed' }, { status: 500 });
+    return generationFailureResponse('ai/summarize', error);
   }
 }

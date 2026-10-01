@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 import { generateQuiz } from '@/lib/ai/service';
+import { generationFailureResponse } from '@/lib/ai/errors';
 import { quizService } from '@/services/quiz.service';
 
 const schema = z.object({
@@ -42,7 +43,6 @@ export async function POST(req: NextRequest) {
     );
     return NextResponse.json({ quiz });
   } catch (error) {
-    console.error('[ai/quiz]', error);
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 });
+    return generationFailureResponse('ai/quiz', error);
   }
 }

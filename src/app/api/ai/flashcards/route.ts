@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { generateFlashcards } from '@/lib/ai/service';
+import { generationFailureResponse } from '@/lib/ai/errors';
 import { flashcardService } from '@/services/flashcard.service';
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
@@ -39,7 +40,6 @@ export async function POST(req: NextRequest) {
     const inserted = await flashcardService.createMany(supabase, rows);
     return NextResponse.json({ flashcards: inserted });
   } catch (error) {
-    console.error('[ai/flashcards]', error);
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 });
+    return generationFailureResponse('ai/flashcards', error);
   }
 }

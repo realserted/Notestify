@@ -4,6 +4,7 @@ import { noteService } from '@/services/notes.service';
 import { deckService } from '@/services/deck.service';
 import { flashcardService } from '@/services/flashcard.service';
 import { generateFlashcards } from '@/lib/ai/service';
+import { generationFailureResponse } from '@/lib/ai/errors';
 import { tiptapToPlainText } from '@/lib/notes/tiptapText';
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
@@ -47,7 +48,6 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: strin
 
     return NextResponse.json({ deck_id: deck.id });
   } catch (error) {
-    console.error('[notes/flashcards]', error);
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 });
+    return generationFailureResponse('notes/flashcards', error);
   }
 }

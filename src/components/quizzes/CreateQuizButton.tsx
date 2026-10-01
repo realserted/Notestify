@@ -55,7 +55,11 @@ export const CreateQuizButton = () => {
     });
     setLoading(false);
     if (!res.ok) {
-      alert('Generation failed');
+      // The route distinguishes a safety block from a response that ran out of
+      // budget, and each has a different remedy. Discarding that for a fixed
+      // string is how "Generation failed" became unexplainable.
+      const body = await res.json().catch(() => null);
+      alert(body?.error ?? 'Generation failed. Please try again.');
       return;
     }
     const { quiz } = await res.json();

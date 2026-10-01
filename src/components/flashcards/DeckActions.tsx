@@ -74,7 +74,8 @@ export const DeckActions = ({ deckId }: Props) => {
     });
     setLoading(false);
     if (!res.ok) {
-      alert('Generation failed');
+      const body = await res.json().catch(() => null);
+      alert(body?.error ?? 'Generation failed. Please try again.');
       return;
     }
     setMode('idle');

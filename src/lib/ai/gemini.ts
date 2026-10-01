@@ -33,8 +33,20 @@ const SAFETY_SETTINGS: SafetySetting[] = [
   },
 ];
 
-/** Caps the cost of a single response. */
-const GENERATION_CONFIG: GenerationConfig = { maxOutputTokens: 2048 };
+/**
+ * Caps the cost of a single response.
+ *
+ * thinkingBudget: 0 is load-bearing, not an optimisation. gemini-2.5-flash
+ * reasons before answering by default, and those tokens are charged against
+ * maxOutputTokens — on a 5,000-character document it spent 1,785 of 2,048
+ * thinking and had 259 left to answer with, so the JSON came back cut off
+ * mid-array and every generation failed. These prompts ask for structured
+ * extraction from supplied text, where deliberation buys nothing.
+ */
+const GENERATION_CONFIG: GenerationConfig & { thinkingConfig?: { thinkingBudget: number } } = {
+  maxOutputTokens: 4096,
+  thinkingConfig: { thinkingBudget: 0 },
+};
 
 export const getGeminiModel = (model = 'gemini-2.5-flash', systemInstruction?: string) =>
   genAI.getGenerativeModel({
@@ -53,6 +65,20 @@ export class ContentBlockedError extends Error {
 }
 
 /**
+ * Thrown when the model ran out of budget mid-answer.
+ *
+ * Separate from ContentBlockedError because the cause and the remedy differ:
+ * nothing was refused, the answer is simply incomplete, and the user's move is
+ * to send less material rather than to send different material.
+ */
+export class ResponseTruncatedError extends Error {
+  constructor() {
+    super('The response was cut off before it finished.');
+    this.name = 'ResponseTruncatedError';
+  }
+}
+
+/**
  * Reads the text out of a response, distinguishing a safety block from a
  * genuine failure. Calling `.text()` directly throws on a blocked response,
  * which otherwise surfaces to the user as a generic 500.
@@ -66,6 +92,15 @@ export const readResponseText = (response: EnhancedGenerateContentResponse): str
 
   if (finishReason === 'SAFETY' || finishReason === 'RECITATION') {
     throw new ContentBlockedError(finishReason);
+  }
+
+  // MAX_TOKENS means the answer stopped mid-sentence. The response is a 200
+  // with real-looking text, so without this check the truncated output flows
+  // into extractJSON and fails there as an unexplained parse error — which is
+  // exactly how this surfaced: "Generation failed", with nothing naming the
+  // cause. Catching it here is the whole reason this function exists.
+  if (finishReason === 'MAX_TOKENS') {
+    throw new ResponseTruncatedError();
   }
 
   const text = response.text();

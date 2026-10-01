@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { noteService } from '@/services/notes.service';
 import { quizService } from '@/services/quiz.service';
 import { generateQuiz } from '@/lib/ai/service';
+import { generationFailureResponse } from '@/lib/ai/errors';
 import { tiptapToPlainText } from '@/lib/notes/tiptapText';
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit';
 
@@ -40,7 +41,6 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: strin
     );
     return NextResponse.json({ quiz_id: quiz.id });
   } catch (error) {
-    console.error('[notes/quiz]', error);
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 });
+    return generationFailureResponse('notes/quiz', error);
   }
 }
